@@ -6,9 +6,10 @@ interface Props {
   description: string;
   noindex?: boolean;
   schema?: "home" | "webpage" | "none";
+  breadcrumbs?: Array<{ name: string; url: string }>;
 }
 
-const { title, description, noindex = false, schema = "webpage" } = Astro.props;
+const { title, description, noindex = false, schema = "webpage", breadcrumbs = [] } = Astro.props;
 const siteUrl = Astro.site?.origin;
 const canonical = !noindex && siteUrl ? new URL(Astro.url.pathname, `${siteUrl}/`).href : undefined;
 
@@ -51,11 +52,27 @@ const webpageStructuredData = {
   } : {}),
 };
 
-const structuredData = noindex || schema === "none"
+const breadcrumbStructuredData = breadcrumbs.length > 0 && siteUrl
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: breadcrumb.name,
+        item: new URL(breadcrumb.url, `${siteUrl}/`).href,
+      })),
+    }
+  : undefined;
+
+const baseStructuredData = noindex || schema === "none"
   ? []
   : schema === "home"
     ? homeStructuredData
     : [webpageStructuredData];
+const structuredData = breadcrumbStructuredData
+  ? [...baseStructuredData, breadcrumbStructuredData]
+  : baseStructuredData;
 ---
 
 <!doctype html>
@@ -65,11 +82,12 @@ const structuredData = noindex || schema === "none"
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large"} />
     <meta name="theme-color" content="#f5f7f4" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#101815" media="(prefers-color-scheme: dark)" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Calculette Mauricette" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {canonical && <meta property="og:url" content={canonical} />}

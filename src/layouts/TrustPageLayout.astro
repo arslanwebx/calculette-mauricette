@@ -13,7 +13,14 @@ interface Props {
 const { title, description, heading, introduction } = Astro.props;
 ---
 
-<BaseLayout {title} {description}>
+<BaseLayout
+  {title}
+  {description}
+  breadcrumbs={[
+    { name: "Accueil", url: "/" },
+    { name: heading, url: Astro.url.pathname },
+  ]}
+>
   <div id="top"></div>
   <Header />
   <main id="contenu" class="trust-main page-shell">

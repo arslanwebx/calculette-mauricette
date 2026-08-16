@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/audit-seo.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
+    "audit:seo": "node scripts/audit-seo.mjs",
     "deploy": "wrangler deploy"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.3",
     "astro": "^7.2.2"
   },
   "devDependencies": {

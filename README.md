@@ -34,7 +34,7 @@ npm test
 npm run build
 ```
 
-La production statique est générée dans `dist/`.
+La production statique est générée dans `dist/`. Le build lance ensuite automatiquement l'audit SEO du HTML généré ; `npm run audit:seo` permet de relancer uniquement cet audit.
 
 ## Cloudflare Workers Builds
 
@@ -50,7 +50,7 @@ Root directory: /
 
 Vous pouvez laisser « Builds for non-production branches » désactivé pour ne publier que la branche de production.
 
-`wrangler.jsonc` publie les fichiers statiques de `dist/`, applique les URL avec slash final, sert la page `404.html` pour les chemins inconnus et relie le Worker au domaine personnalisé `calculette-mauricette.pro`.
+`wrangler.jsonc` publie les fichiers statiques de `dist/`, applique les URL avec slash final, sert la page `404.html` pour les chemins inconnus et relie le Worker aux domaines `calculette-mauricette.pro` et `www.calculette-mauricette.pro`. Le Worker redirige en une étape les variantes HTTP et `www` vers l'adresse HTTPS canonique.
 
 Aucun backend, adaptateur SSR, compte utilisateur, service API ou base de données n'est utilisé. Wrangler sert uniquement les fichiers statiques produits par Astro.
 
@@ -63,7 +63,7 @@ Avant le premier déploiement :
 3. connectez le dépôt GitHub `arslanrajput-sys/calculette-mauricette` ;
 4. entrez les commandes ci-dessus puis cliquez sur « Deploy ».
 
-La route `custom_domain` de `wrangler.jsonc` demande à Cloudflare d'associer automatiquement le domaine principal. Pour `www.calculette-mauricette.pro`, créez ensuite une règle de redirection permanente vers `https://calculette-mauricette.pro` afin de conserver une seule adresse canonique.
+Les routes `custom_domain` de `wrangler.jsonc` demandent à Cloudflare d'associer automatiquement les domaines principal et `www`. La redirection permanente vers `https://calculette-mauricette.pro` est gérée par le Worker versionné dans ce dépôt.
 
 ## Workflow GitHub
 
@@ -109,11 +109,11 @@ Le build génère automatiquement :
 
 - la canonical `https://calculette-mauricette.pro/` ;
 - les URL Open Graph absolues ;
-- `sitemap-index.xml` et `sitemap-0.xml` ;
+- `sitemap.xml`, alimenté automatiquement par les pages Astro publiques et indexables ;
 - la référence du sitemap dans `robots.txt` ;
 - une page `404.html` marquée `noindex, nofollow`.
 
-Après la première mise en ligne, soumettez `https://calculette-mauricette.pro/sitemap-index.xml` dans Google Search Console.
+Après la première mise en ligne, soumettez `https://calculette-mauricette.pro/sitemap.xml` dans Google Search Console.
 
 ## Vie privée
 

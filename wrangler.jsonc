@@ -2,14 +2,21 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "calculette-mauricette",
   "compatibility_date": "2026-08-16",
+  "main": "./src/worker.ts",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true,
     "html_handling": "force-trailing-slash",
     "not_found_handling": "404-page"
   },
   "routes": [
     {
       "pattern": "calculette-mauricette.pro",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.calculette-mauricette.pro",
       "custom_domain": true
     }
   ]
