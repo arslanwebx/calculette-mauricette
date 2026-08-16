@@ -1,0 +1,50 @@
+---
+import TrustPageLayout from "../layouts/TrustPageLayout.astro";
+
+const title = "À propos de Calculette Mauricette";
+const description = "Découvrez pourquoi Calculette Mauricette a été créée, comment les calculs sont présentés et quelles sources sont utilisées.";
+---
+
+<TrustPageLayout
+  {title}
+  {description}
+  heading="À propos de Calculette Mauricette"
+  introduction="Calculette Mauricette répond à un besoin simple : additionner des horaires de travail sans convertir les minutes à la main ni hésiter entre 7,30 et 7,50 heures."
+>
+  <section>
+    <h2>Un outil simple pour calculer ses heures</h2>
+    <p>Le site permet de saisir une heure de début, une heure de fin et, si nécessaire, une pause. Plusieurs plages peuvent être réunies pour distinguer le matin, l'après-midi ou toute autre période travaillée.</p>
+    <p>Le résultat apparaît sous une forme habituelle, par exemple 8 h 00, ainsi qu'en heures décimales lorsque ce format est utile. Le mode semaine rassemble les totaux quotidiens du lundi au dimanche.</p>
+  </section>
+
+  <section>
+    <h2>Pourquoi « Mauricette » ?</h2>
+    <p>Sur le web francophone, les expressions « calculette Mauricette » et « calculatrice Mauricette » sont couramment associées aux outils qui additionnent et convertissent des horaires de travail. Le site reprend ce nom parce qu'il correspond à l'outil que les internautes cherchent.</p>
+    <p>L'origine précise de cette appellation n'est pas établie de façon suffisamment fiable pour raconter une histoire à son sujet. Nous préférons le dire clairement plutôt que d'en inventer une.</p>
+  </section>
+
+  <section>
+    <h2>Notre priorité : des calculs compréhensibles</h2>
+    <p>Un résultat doit pouvoir être vérifié. Pour une journée composée de 08:30 à 12:00 puis de 13:00 à 17:30, la première plage vaut 3 h 30 et la seconde 4 h 30. Le total est donc de 8 h 00, soit 8,00 heures décimales.</p>
+    <p>Les formules restent séparées des explications juridiques. La calculatrice mesure des durées, mais elle ne décide pas de la qualification de ces heures sur une fiche de paie.</p>
+  </section>
+
+  <section>
+    <h2>Des informations vérifiées</h2>
+    <p>Lorsqu'une page aborde le temps de travail en France, la priorité est donnée aux sources publiques telles que Service-Public.fr, Legifrance, le ministère du Travail et l'URSSAF lorsque le sujet s'y prête.</p>
+    <p>Ces explications restent générales. Elles ne remplacent pas l'étude d'un contrat, d'une convention collective, d'un accord d'entreprise ou les conseils d'un professionnel compétent.</p>
+  </section>
+
+  <section>
+    <h2>Un site qui évolue</h2>
+    <p>D'autres outils consacrés au calcul et au suivi du temps de travail pourront être ajoutés progressivement. Chaque nouveauté doit rester claire, utile et cohérente avec la calculatrice principale.</p>
+  </section>
+
+  <section class="trust-cta">
+    <div>
+      <h2>Une remarque ou une erreur ?</h2>
+      <p>Si vous repérez un calcul incorrect, une explication peu claire, une information dépassée ou un problème technique, dites-le-nous.</p>
+    </div>
+    <a class="button" href="/contact/">Nous contacter</a>
+  </section>
+</TrustPageLayout>

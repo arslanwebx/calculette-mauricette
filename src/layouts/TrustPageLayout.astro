@@ -1,0 +1,34 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  introduction: string;
+}
+
+const { title, description, heading, introduction } = Astro.props;
+---
+
+<BaseLayout {title} {description}>
+  <div id="top"></div>
+  <Header />
+  <main id="contenu" class="trust-main page-shell">
+    <nav class="breadcrumbs" aria-label="Fil d'Ariane">
+      <a href="/">Accueil</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{heading}</span>
+    </nav>
+    <article class="trust-article">
+      <header class="trust-page-header">
+        <h1>{heading}</h1>
+        <p>{introduction}</p>
+      </header>
+      <slot />
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>

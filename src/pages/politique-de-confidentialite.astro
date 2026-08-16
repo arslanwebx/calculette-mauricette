@@ -1,0 +1,66 @@
+---
+import TrustPageLayout from "../layouts/TrustPageLayout.astro";
+import { siteConfig } from "../config/site";
+
+const title = "Politique de confidentialité | Calculette Mauricette";
+const description = "Découvrez quelles données Calculette Mauricette utilise, comment les horaires restent dans votre navigateur et comment exercer vos droits.";
+const contactFormConfigured = Boolean(
+  siteConfig.contact.formEndpoint && siteConfig.contact.formProvider,
+);
+---
+
+<TrustPageLayout
+  {title}
+  {description}
+  heading="Politique de confidentialité"
+  introduction="Cette page décrit le fonctionnement réel du site et les données utilisées. Calculette Mauricette ne contient actuellement ni publicité, ni outil de suivi d'audience, ni compte utilisateur."
+>
+  <section>
+    <h2>Données saisies dans la calculatrice</h2>
+    <p>Les horaires, pauses et valeurs que vous saisissez sont calculés directement dans votre navigateur. Ils ne sont pas envoyés à un serveur par la calculatrice.</p>
+    <p>Le site utilise le stockage local du navigateur pour restaurer vos valeurs après un rechargement ou une nouvelle visite. Le bouton « Effacer mes données » situé au-dessus de la calculatrice supprime cet enregistrement. Vous pouvez aussi effacer les données du site depuis les réglages de votre navigateur.</p>
+  </section>
+
+  <section>
+    <h2>Données envoyées via le formulaire de contact</h2>
+    {contactFormConfigured ? (
+      <>
+        <p>Lorsque vous envoyez le formulaire, le nom, l'adresse e-mail, le sujet et le message sont transmis au service configuré pour permettre une réponse. Ces informations ne sont pas utilisées pour vous inscrire à une liste commerciale.</p>
+        {siteConfig.contact.formProvider && <p>Service utilisé pour l'envoi : {siteConfig.contact.formProvider}.</p>}
+        <p>La durée de conservation dépend du temps nécessaire au traitement de la demande et des obligations applicables. Une demande de suppression peut être faite depuis la <a href="/contact/">page de contact</a>.</p>
+      </>
+    ) : (
+      <p>L'envoi en ligne n'est pas activé dans la configuration actuelle. Les champs affichés sur la page Contact ne transmettent donc aucune donnée. Cette politique devra être complétée avec le nom du prestataire et les conditions de traitement avant l'activation du formulaire.</p>
+    )}
+  </section>
+
+  <section>
+    <h2>Cookies et stockage local</h2>
+    <p>Un cookie et le stockage local ne sont pas la même chose. Un cookie est envoyé avec certaines requêtes web, tandis que le stockage local reste associé au navigateur.</p>
+    <p>Calculette Mauricette n'installe actuellement aucun cookie publicitaire ou de suivi. Le stockage local sert uniquement à conserver les valeurs de la calculatrice. Aucun bandeau de consentement n'est donc affiché à ce stade.</p>
+  </section>
+
+  <section>
+    <h2>Mesure d'audience</h2>
+    <p>Le site n'utilise actuellement aucun service de mesure d'audience nécessitant un suivi des visiteurs. Si un outil d'analyse est ajouté, cette page sera mise à jour avant son activation.</p>
+  </section>
+
+  <section>
+    <h2>Services tiers</h2>
+    <p>Le site est hébergé et distribué par Cloudflare. Comme tout hébergeur, Cloudflare peut traiter des informations techniques nécessaires à la sécurité et à la livraison du site, par exemple l'adresse IP et les journaux de requêtes, selon ses propres conditions.</p>
+    <p>Aucune police distante, vidéo intégrée, publicité, API externe ou plateforme sociale n'est chargée par les pages actuelles.</p>
+    <p><a href={siteConfig.hosting.privacyPolicy} target="_blank" rel="noopener noreferrer external">Consulter la politique de confidentialité de Cloudflare</a></p>
+  </section>
+
+  <section>
+    <h2>Vos droits</h2>
+    <p>Selon la situation, vous pouvez demander l'accès, la rectification, l'effacement, la limitation ou la portabilité de données vous concernant, et vous opposer à certains traitements. Vous pouvez nous écrire depuis la <a href="/contact/">page de contact</a>.</p>
+    <p>Vous pouvez également consulter les explications de la <a href="https://www.cnil.fr/fr/les-droits-pour-maitriser-vos-donnees-personnelles" target="_blank" rel="noopener noreferrer external">CNIL sur les droits liés aux données personnelles</a> ou lui adresser une réclamation.</p>
+  </section>
+
+  <section>
+    <h2>Modifications de cette politique</h2>
+    <p>Cette politique sera mise à jour si les fonctions du site, l'hébergement, le formulaire de contact ou les traitements de données changent.</p>
+    <p class="legal-date">Dernière mise à jour : {siteConfig.legalUpdatedAt}</p>
+  </section>
+</TrustPageLayout>

@@ -1,0 +1,57 @@
+---
+import TrustPageLayout from "../layouts/TrustPageLayout.astro";
+import { siteConfig } from "../config/site";
+
+const title = "Conditions d'utilisation | Calculette Mauricette";
+const description = "Consultez les conditions simples d'utilisation de la calculatrice et des contenus proposés par Calculette Mauricette.";
+---
+
+<TrustPageLayout
+  {title}
+  {description}
+  heading="Conditions d'utilisation"
+  introduction="Ces conditions expliquent simplement ce que le site fournit, comment utiliser la calculatrice et quelles vérifications restent à la charge de l'utilisateur."
+>
+  <section>
+    <h2>Objet du site</h2>
+    <p>Calculette Mauricette propose gratuitement des outils de calcul du temps de travail et des explications pratiques. Le service permet notamment d'additionner des plages horaires, de retirer des pauses et de convertir des durées.</p>
+  </section>
+
+  <section>
+    <h2>Utilisation de la calculatrice</h2>
+    <p>Vous restez responsable des horaires saisis et de leur correspondance avec votre situation réelle. Vérifiez aussi les règles de votre contrat, de votre convention collective, de votre employeur ou de l'administration concernée.</p>
+    <p>Un résultat mathématique n'indique pas automatiquement comment une heure doit être qualifiée ou rémunérée.</p>
+  </section>
+
+  <section>
+    <h2>Disponibilité du service</h2>
+    <p>Des efforts raisonnables sont faits pour maintenir le site accessible et rapide. Une interruption peut toutefois survenir en raison d'une maintenance, d'un incident technique ou d'un service extérieur.</p>
+  </section>
+
+  <section>
+    <h2>Exactitude</h2>
+    <p>Les calculs et contenus sont vérifiés avec soin, mais une erreur reste possible. Si vous en repérez une, utilisez la <a href="/contact/">page de contact</a> en indiquant les valeurs saisies et le résultat attendu.</p>
+  </section>
+
+  <section>
+    <h2>Responsabilité</h2>
+    <p>Le site est un outil général de calcul et d'information. Il ne remplace ni les relevés officiels de l'employeur, ni une fiche de paie, ni un conseil juridique ou professionnel adapté à une situation individuelle.</p>
+    <p>Pour une décision ayant des conséquences financières, contractuelles ou juridiques, confrontez le résultat aux documents applicables et, si nécessaire, demandez l'avis d'une personne compétente.</p>
+  </section>
+
+  <section>
+    <h2>Utilisation abusive</h2>
+    <p>Il est interdit d'utiliser le site pour tenter de compromettre sa sécurité, perturber son fonctionnement, contourner ses protections ou mener une activité contraire à la loi. L'utilisation normale de la calculatrice, même répétée, reste libre.</p>
+  </section>
+
+  <section>
+    <h2>Propriété intellectuelle</h2>
+    <p>La présentation, les textes originaux et les éléments propres à Calculette Mauricette ne peuvent pas être repris sans autorisation, sauf disposition légale ou licence applicable. Les formules mathématiques générales et les informations publiques restent libres dans les limites prévues par la loi.</p>
+  </section>
+
+  <section>
+    <h2>Modification des conditions</h2>
+    <p>Ces conditions peuvent être adaptées si le fonctionnement ou les services du site changent. La date ci-dessous n'est modifiée qu'après une véritable révision de la page.</p>
+    <p class="legal-date">Dernière mise à jour : {siteConfig.legalUpdatedAt}</p>
+  </section>
+</TrustPageLayout>

@@ -11,6 +11,7 @@ Homepage Astro statique pour calculer les heures de travail en français. Le pro
 - conversion heures/minutes vers heures décimales et inversement ;
 - copie, impression, réinitialisation et chargement d'un exemple ;
 - sauvegarde automatique dans `localStorage`, sans serveur ;
+- pages À propos, Contact, Confidentialité, Mentions légales et Conditions d'utilisation ;
 - canonical, sitemap et métadonnées sociales pour `calculette-mauricette.pro` ;
 - HTML statique, CSS natif et JavaScript léger.
 
@@ -83,9 +84,24 @@ Le domaine de production est déjà le réglage par défaut. La variable reste d
 
 ```text
 PUBLIC_SITE_URL=https://calculette-mauricette.pro
+PUBLIC_PUBLISHER_NAME=
+PUBLIC_PUBLISHER_TYPE=
+PUBLIC_CONTACT_EMAIL=
+PUBLIC_CONTACT_FORM_ENDPOINT=
+PUBLIC_CONTACT_FORM_PROVIDER=
 ```
 
 Le fichier `.env` reste ignoré par Git. `.env.example` est versionné. Cloudflare n'a pas besoin de cette variable pour le déploiement normal puisque le domaine réel est déjà configuré dans `astro.config.mjs`.
+
+### Informations à renseigner avant l'ouverture publique
+
+Les mentions légales ne fabriquent aucune identité. Renseignez dans Cloudflare :
+
+- `PUBLIC_PUBLISHER_NAME` : nom réel de l'éditeur ;
+- `PUBLIC_PUBLISHER_TYPE` : particulier, entreprise individuelle, société ou autre qualité exacte ;
+- `PUBLIC_CONTACT_EMAIL` : adresse publique de contact, si elle doit être affichée.
+
+Le formulaire reste désactivé tant que `PUBLIC_CONTACT_FORM_ENDPOINT` est vide. Pour l'activer, fournissez l'URL réelle d'un service acceptant les champs `name`, `email`, `subject` et `message`, puis indiquez son nom dans `PUBLIC_CONTACT_FORM_PROVIDER`. Vérifiez le traitement et la conservation des messages, puis ajustez la politique de confidentialité si nécessaire.
 
 ## SEO après déploiement
 
@@ -101,4 +117,4 @@ Après la première mise en ligne, soumettez `https://calculette-mauricette.pro/
 
 ## Vie privée
 
-Les horaires et préférences sont stockés uniquement dans le `localStorage` du navigateur. Le projet ne contient aucun suivi, formulaire réseau ou traitement côté serveur. Le bouton « Effacer mes données » supprime cet enregistrement local.
+Les horaires et préférences sont stockés uniquement dans le `localStorage` du navigateur. Le projet ne contient aucun suivi d'audience, cookie publicitaire ou traitement serveur de la calculatrice. Le bouton « Effacer mes données » supprime cet enregistrement local. Par défaut, le formulaire de contact est désactivé et ne transmet rien.

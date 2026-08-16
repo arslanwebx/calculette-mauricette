@@ -5,13 +5,14 @@ interface Props {
   title: string;
   description: string;
   noindex?: boolean;
+  schema?: "home" | "webpage" | "none";
 }
 
-const { title, description, noindex = false } = Astro.props;
+const { title, description, noindex = false, schema = "webpage" } = Astro.props;
 const siteUrl = Astro.site?.origin;
 const canonical = !noindex && siteUrl ? new URL(Astro.url.pathname, `${siteUrl}/`).href : undefined;
 
-const structuredData = noindex ? [] : [
+const homeStructuredData = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -33,6 +34,28 @@ const structuredData = noindex ? [] : [
     description,
   },
 ];
+
+const webpageStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  ...(canonical ? { url: canonical } : {}),
+  name: title,
+  description,
+  inLanguage: "fr-FR",
+  ...(siteUrl ? {
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Calculette Mauricette",
+      url: siteUrl,
+    },
+  } : {}),
+};
+
+const structuredData = noindex || schema === "none"
+  ? []
+  : schema === "home"
+    ? homeStructuredData
+    : [webpageStructuredData];
 ---
 
 <!doctype html>
@@ -56,7 +79,7 @@ const structuredData = noindex ? [] : [
     {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    {!noindex && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
+    {structuredData.length > 0 && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
   </head>
   <body>
     <a class="skip-link" href="#contenu">Aller au contenu</a>

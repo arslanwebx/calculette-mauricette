@@ -1,0 +1,66 @@
+---
+import TrustPageLayout from "../layouts/TrustPageLayout.astro";
+import { siteConfig } from "../config/site";
+
+const title = "Mentions légales | Calculette Mauricette";
+const description = "Consultez les mentions légales, les informations d'hébergement et les limites d'utilisation de Calculette Mauricette.";
+const publisherConfigured = Boolean(siteConfig.publisher.name && siteConfig.publisher.type);
+---
+
+<TrustPageLayout
+  {title}
+  {description}
+  heading="Mentions légales"
+  introduction="Cette page présente l'éditeur et l'hébergeur du site, ainsi que les limites raisonnables d'un outil de calcul du temps de travail."
+>
+  <section>
+    <h2>Éditeur du site</h2>
+    {publisherConfigured ? (
+      <dl class="legal-details">
+        <div><dt>Nom</dt><dd>{siteConfig.publisher.name}</dd></div>
+        <div><dt>Qualité</dt><dd>{siteConfig.publisher.type}</dd></div>
+        <div><dt>Site</dt><dd><a href={siteConfig.url}>{siteConfig.url}</a></dd></div>
+        {siteConfig.contact.email && <div><dt>Contact</dt><dd><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></dd></div>}
+      </dl>
+    ) : (
+      <div class="configuration-notice" role="note">
+        <strong>Informations d'éditeur à compléter avant l'ouverture publique.</strong>
+        <p>L'identité et la qualité juridique du responsable n'ont pas été fournies. Elles ne sont pas remplacées par un nom ou un numéro inventé. Le propriétaire du site doit renseigner la configuration prévue à cet effet.</p>
+      </div>
+    )}
+    <p>Pour une demande concernant le site, utilisez la <a href="/contact/">page de contact</a>.</p>
+  </section>
+
+  <section>
+    <h2>Hébergement</h2>
+    <dl class="legal-details">
+      <div><dt>Hébergeur</dt><dd>{siteConfig.hosting.name}</dd></div>
+      <div><dt>Adresse</dt><dd>{siteConfig.hosting.address}</dd></div>
+      <div><dt>Site</dt><dd><a href={siteConfig.hosting.website} target="_blank" rel="noopener noreferrer external">cloudflare.com</a></dd></div>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Propriété intellectuelle</h2>
+    <p>Les textes originaux, l'interface, les éléments graphiques et la présentation de la calculatrice ne peuvent pas être reproduits ou réutilisés sans autorisation, sauf lorsque la loi ou une licence applicable le permet.</p>
+    <p>Cette protection ne porte pas sur les formules mathématiques générales, les textes officiels ni sur l'idée générale d'un calculateur d'heures.</p>
+  </section>
+
+  <section>
+    <h2>Exactitude des calculs</h2>
+    <p>La calculatrice est fournie comme une aide pratique. Les formules sont testées, mais une erreur de saisie, un cas particulier ou un défaut technique reste possible.</p>
+    <p>Vérifiez les résultats importants lorsqu'ils ont un effet sur une paie, un litige, une obligation contractuelle ou une démarche administrative. Une erreur peut être signalée depuis la <a href="/contact/">page de contact</a>.</p>
+  </section>
+
+  <section>
+    <h2>Informations relatives au droit du travail</h2>
+    <p>Les contenus consacrés au temps de travail sont fournis à titre informatif. Ils ne remplacent pas l'analyse de votre contrat, de votre convention collective, d'un accord d'entreprise ou les conseils d'un professionnel compétent.</p>
+    <p>Les règles applicables peuvent varier selon la situation du salarié, le secteur, l'organisation du temps de travail et les accords en vigueur.</p>
+  </section>
+
+  <section>
+    <h2>Sources externes</h2>
+    <p>Des liens vers des sites officiels ou d'autres ressources peuvent être proposés pour faciliter une vérification. Leur contenu et leur disponibilité relèvent de leurs éditeurs respectifs.</p>
+    <p class="legal-date">Informations d'hébergement vérifiées le {siteConfig.legalUpdatedAt}.</p>
+  </section>
+</TrustPageLayout>

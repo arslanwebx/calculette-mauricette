@@ -1,0 +1,25 @@
+---
+import TrustPageLayout from "../layouts/TrustPageLayout.astro";
+import ContactForm from "../components/ContactForm.astro";
+
+const title = "Contact | Calculette Mauricette";
+const description = "Contactez Calculette Mauricette pour signaler une erreur, un problème de calcul, proposer une amélioration ou poser une question sur vos données.";
+---
+
+<TrustPageLayout
+  {title}
+  {description}
+  heading="Nous contacter"
+  introduction="Une question sur la calculatrice ? Vous avez repéré une erreur ou une information qui mérite d'être mise à jour ? Écrivez-nous."
+>
+  <section>
+    <h2>Pourquoi nous écrire ?</h2>
+    <p>Vous pouvez nous signaler un problème avec un calcul, un bug, une explication incorrecte ou difficile à comprendre. Les suggestions d'amélioration, demandes liées à la confidentialité et propositions éditoriales pertinentes sont également les bienvenues.</p>
+    <p>Pour une question sur le droit du travail ou votre situation personnelle, utilisez plutôt une source officielle ou un professionnel qualifié. Nous pouvons corriger le site, mais nous ne fournissons pas de conseil juridique individualisé.</p>
+  </section>
+
+  <section aria-labelledby="contact-form-title">
+    <h2 id="contact-form-title">Envoyer un message</h2>
+    <ContactForm />
+  </section>
+</TrustPageLayout>
