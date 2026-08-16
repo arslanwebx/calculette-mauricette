@@ -2,11 +2,13 @@ import { describe, expect, it } from "vitest";
 import {
   calculateDayTotal,
   calculateInterval,
+  calculateWeekTotal,
   decimalToMinutes,
   formatFrenchDecimal,
   minutesToDecimal,
   minutesToHHMM,
   parseDuration,
+  parseFrenchDecimal,
   parseTime,
 } from "./time";
 
@@ -45,5 +47,19 @@ describe("time utilities", () => {
     expect(parseDuration("36:15")).toBe(2175);
     expect(parseDuration("7h30")).toBe(450);
     expect(minutesToHHMM(2175)).toBe("36 h 15");
+  });
+
+  it("rejects invalid durations and keeps valid weekly totals accurate", () => {
+    expect(parseDuration("17:60")).toBeNull();
+    expect(parseDuration("7h3")).toBe(423);
+    expect(calculateDayTotal([{ start: "08:00", end: "17:00" }], 600)).toBe(0);
+    expect(calculateWeekTotal([480, null, 465, 0])).toBe(945);
+  });
+
+  it("accepts French decimal input and rounds to the nearest minute", () => {
+    expect(parseFrenchDecimal("7,75")).toBe(7.75);
+    expect(parseFrenchDecimal("7.5")).toBe(7.5);
+    expect(parseFrenchDecimal("-1")).toBeNull();
+    expect(decimalToMinutes(1.008)).toBe(60);
   });
 });

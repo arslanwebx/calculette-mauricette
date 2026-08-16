@@ -273,9 +273,9 @@ h3 {
 .calculator-shell {
   overflow: hidden;
   border: 1px solid var(--line-strong);
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--surface);
-  box-shadow: var(--shadow);
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--text) 7%, transparent);
 }
 
 .calculator-titlebar {
@@ -283,13 +283,13 @@ h3 {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 1.25rem;
+  padding: 1.05rem clamp(1rem, 3vw, 1.5rem);
   border-bottom: 1px solid var(--line);
 }
 
 .calculator-titlebar h2 {
-  margin-bottom: 0.05rem;
-  font-size: 1.05rem;
+  margin-bottom: 0.14rem;
+  font-size: 1.12rem;
   letter-spacing: -0.02em;
 }
 
@@ -300,30 +300,36 @@ h3 {
 }
 
 .clear-data-button {
-  min-height: 40px;
-  border: 0;
-  background: transparent;
+  min-height: 42px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: var(--surface-soft);
   color: var(--text-soft);
   cursor: pointer;
+  padding: 0.5rem 0.7rem;
   font-size: 0.82rem;
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
+  font-weight: 600;
+}
+
+.clear-data-button:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
 }
 
 .calculator-tabs {
   display: flex;
-  gap: 1.25rem;
+  gap: 0;
   overflow-x: auto;
   border-bottom: 1px solid var(--line);
   background: var(--surface);
-  padding: 0 1.25rem;
+  padding: 0 clamp(0.8rem, 2vw, 1.25rem);
   scrollbar-width: thin;
 }
 
 .calculator-tabs button {
   position: relative;
   flex: 0 0 auto;
-  min-height: 52px;
+  min-height: 54px;
   border: 0;
   background: transparent;
   color: var(--text-soft);
@@ -350,7 +356,7 @@ h3 {
 }
 
 .calculator-panel {
-  padding: clamp(1.15rem, 3vw, 2rem);
+  padding: clamp(1.15rem, 3vw, 2.15rem);
 }
 
 .calculator-panel[hidden] {
@@ -360,7 +366,7 @@ h3 {
 .calculator-grid,
 .compact-tool-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.65fr);
+  grid-template-columns: minmax(0, 1fr) minmax(285px, 340px);
   gap: clamp(1.2rem, 3vw, 2rem);
   align-items: stretch;
 }
@@ -397,7 +403,7 @@ h3 {
   display: grid;
   grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr) 42px;
   gap: 2.25rem;
-  margin: 0 0 0.3rem;
+  margin: 0 0 0.45rem;
   color: var(--text-soft);
   font-size: 0.78rem;
   font-weight: 700;
@@ -406,9 +412,13 @@ h3 {
 .period-row {
   display: grid;
   grid-template-columns: minmax(120px, 1fr) 20px minmax(120px, 1fr) 42px;
-  gap: 0.65rem;
+  gap: 0.7rem;
   align-items: center;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-soft);
+  padding: 0.6rem;
 }
 
 .period-row label,
@@ -472,6 +482,7 @@ textarea[aria-invalid="true"] {
 
 .time-arrow {
   color: var(--text-soft);
+  font-weight: 700;
   text-align: center;
 }
 
@@ -518,7 +529,7 @@ textarea[aria-invalid="true"] {
   grid-template-columns: 155px minmax(110px, 160px);
   gap: 0.35rem 0.8rem;
   align-items: center;
-  margin-top: 0.9rem;
+  margin-top: 1rem;
   border-top: 1px solid var(--line);
   padding-top: 1rem;
 }
@@ -542,9 +553,10 @@ textarea[aria-invalid="true"] {
   min-width: 0;
   flex-direction: column;
   justify-content: space-between;
-  gap: 1.1rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  gap: 1rem;
+  border: 1px solid var(--line-strong);
+  border-top: 3px solid var(--accent);
+  border-radius: 12px;
   background: var(--surface-soft);
   color: var(--text);
   padding: clamp(1.25rem, 3vw, 1.7rem);
@@ -560,7 +572,7 @@ textarea[aria-invalid="true"] {
 .result-primary {
   display: block;
   color: var(--accent-hover);
-  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-size: clamp(2.2rem, 5vw, 3.05rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.045em;
@@ -573,7 +585,7 @@ textarea[aria-invalid="true"] {
   justify-content: space-between;
   gap: 0.7rem;
   border-top: 1px solid var(--line);
-  padding-top: 0.65rem;
+  padding-top: 0.7rem;
   color: var(--text-soft);
   font-size: 0.82rem;
 }
@@ -588,7 +600,7 @@ textarea[aria-invalid="true"] {
 .result-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 .button {
@@ -684,12 +696,13 @@ textarea[aria-invalid="true"] {
   min-width: 0;
   margin: 0;
   border: 0;
-  border-top: 1px solid var(--line);
-  padding: 0.65rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 0.7rem 0.65rem;
 }
 
 .week-row.is-weekend {
-  background: var(--surface-soft);
+  background: color-mix(in srgb, var(--surface-soft) 75%, var(--surface));
 }
 
 .day-toggle {
@@ -719,7 +732,7 @@ textarea[aria-invalid="true"] {
   gap: 1rem;
   margin-top: 1rem;
   border-top: 2px solid var(--accent);
-  border-radius: 0 0 var(--radius) var(--radius);
+  border-radius: 12px;
   background: var(--surface-soft);
   color: var(--text);
   padding: 1rem 1.2rem;
@@ -769,13 +782,24 @@ textarea[aria-invalid="true"] {
 }
 
 .converter-block {
-  border-top: 2px solid var(--line-strong);
-  padding: 1rem 0 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  padding: 1.15rem;
 }
 
 .converter-block h2 {
   margin-bottom: 1rem;
   font-size: 1.12rem;
+}
+
+@media (min-width: 901px) {
+  .calculator-grid > .result-card,
+  .compact-tool-layout > .result-card {
+    position: sticky;
+    top: 1rem;
+    align-self: start;
+  }
 }
 
 .inline-fields {
