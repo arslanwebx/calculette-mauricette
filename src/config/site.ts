@@ -1,5 +1,7 @@
 const readPublicValue = (value: string | undefined) => value?.trim() ?? "";
 const defaultContactEmail = "contact@calculette-mauricette.pro";
+const web3FormsEndpoint = "https://api.web3forms.com/submit";
+const web3FormsAccessKey = "a598f339-a1c9-42d5-8532-4b2c31256af4";
 
 export const siteConfig = {
   name: "Calculette Mauricette",
@@ -12,8 +14,9 @@ export const siteConfig = {
   },
   contact: {
     email: readPublicValue(import.meta.env.PUBLIC_CONTACT_EMAIL) || defaultContactEmail,
-    formEndpoint: readPublicValue(import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT),
-    formProvider: readPublicValue(import.meta.env.PUBLIC_CONTACT_FORM_PROVIDER),
+    formEndpoint: web3FormsEndpoint,
+    formProvider: "Web3Forms",
+    formAccessKey: web3FormsAccessKey,
   },
   hosting: {
     name: "Cloudflare, Inc.",
