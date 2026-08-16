@@ -1,0 +1,406 @@
+---
+import DailyCalculator from "./DailyCalculator.astro";
+import WeeklyCalculator from "./WeeklyCalculator.astro";
+import SubtractionCalculator from "./SubtractionCalculator.astro";
+import DecimalConverter from "./DecimalConverter.astro";
+---
+
+<section class="calculator-shell" id="calculatrice" aria-labelledby="calculator-title">
+  <div class="calculator-titlebar">
+    <div>
+      <h2 id="calculator-title">Calculatrice d'heures</h2>
+      <p>Les résultats se mettent à jour pendant la saisie.</p>
+    </div>
+    <button class="clear-data-button" id="clear-saved-data" type="button">Effacer mes données</button>
+  </div>
+
+  <div class="calculator-tabs" role="tablist" aria-label="Modes de calcul">
+    <button id="tab-journee" role="tab" aria-selected="true" aria-controls="journee" tabindex="0" data-tab="journee">Journée</button>
+    <button id="tab-semaine" role="tab" aria-selected="false" aria-controls="semaine" tabindex="-1" data-tab="semaine">Semaine</button>
+    <button id="tab-soustraction" role="tab" aria-selected="false" aria-controls="soustraction" tabindex="-1" data-tab="soustraction">Soustraction</button>
+    <button id="tab-conversion" role="tab" aria-selected="false" aria-controls="conversion" tabindex="-1" data-tab="conversion">Conversion</button>
+  </div>
+
+  <DailyCalculator />
+  <WeeklyCalculator />
+  <SubtractionCalculator />
+  <DecimalConverter />
+</section>
+
+<p class="save-status" id="save-status" aria-live="polite">Enregistrement local activé</p>
+
+<script>
+  import {
+    calculateInterval,
+    decimalToMinutes,
+    formatFrenchDecimal,
+    minutesToDecimal,
+    minutesToHHMM,
+    parseDuration,
+    parseFrenchDecimal,
+    parseTime,
+  } from "../lib/time";
+
+  const STORAGE_KEY = "mauricette-calculator-v1";
+  const tabButtons = Array.from(document.querySelectorAll<HTMLButtonElement>("[role='tab'][data-tab]"));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>("[role='tabpanel'][data-panel]"));
+  const dailyPeriods = document.querySelector<HTMLElement>("#daily-periods");
+  const dailyForm = document.querySelector<HTMLFormElement>("#daily-form");
+  const weeklyForm = document.querySelector<HTMLFormElement>("#weekly-form");
+  const subtractionForm = document.querySelector<HTMLFormElement>("#subtraction-form");
+  const durationConverter = document.querySelector<HTMLFormElement>("#duration-converter");
+  const decimalConverter = document.querySelector<HTMLFormElement>("#decimal-converter");
+
+  type SavedState = {
+    activeTab?: string;
+    daily?: { rows?: Array<{ start: string; end: string }>; pause?: string };
+    weekly?: Record<string, string | boolean>;
+    subtraction?: { first?: string; second?: string };
+    conversion?: { hours?: string; minutes?: string; decimal?: string };
+  };
+
+  function setText(selector: string, value: string) {
+    const element = document.querySelector<HTMLOutputElement>(selector);
+    if (element) element.textContent = value;
+  }
+
+  function setError(selector: string, message = "") {
+    const element = document.querySelector<HTMLElement>(selector);
+    if (!element) return;
+    element.textContent = message;
+    element.hidden = !message;
+  }
+
+  function activateTab(tabName: string, updateHash = false) {
+    const target = tabButtons.find((button) => button.dataset.tab === tabName);
+    if (!target) return;
+
+    tabButtons.forEach((button) => {
+      const selected = button === target;
+      button.setAttribute("aria-selected", String(selected));
+      button.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach((panel) => {
+      const selected = panel.dataset.panel === tabName;
+      panel.hidden = !selected;
+      panel.classList.toggle("is-active", selected);
+    });
+    if (updateHash) history.replaceState(null, "", `#${tabName}`);
+    saveState();
+  }
+
+  tabButtons.forEach((button, index) => {
+    button.addEventListener("click", () => activateTab(button.dataset.tab ?? "journee"));
+    button.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      let nextIndex = index;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % tabButtons.length;
+      if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = tabButtons.length - 1;
+      tabButtons[nextIndex].focus();
+      activateTab(tabButtons[nextIndex].dataset.tab ?? "journee");
+    });
+  });
+
+  function createPeriodRow(start = "", end = "") {
+    const row = document.createElement("div");
+    row.className = "period-row";
+    row.dataset.periodRow = "";
+    const index = (dailyPeriods?.querySelectorAll("[data-period-row]").length ?? 0) + 1;
+    row.innerHTML = `
+      <label>
+        <span class="mobile-field-label">Début</span>
+        <input type="time" name="daily-start" value="${start}" aria-label="Début de la période ${index}" required>
+      </label>
+      <span class="time-arrow" aria-hidden="true">→</span>
+      <label>
+        <span class="mobile-field-label">Fin</span>
+        <input type="time" name="daily-end" value="${end}" aria-label="Fin de la période ${index}" required>
+      </label>
+      <button class="icon-button remove-period" type="button" aria-label="Supprimer la période ${index}">
+        <span aria-hidden="true">×</span>
+      </button>`;
+    return row;
+  }
+
+  function syncPeriodRows() {
+    const rows = Array.from(dailyPeriods?.querySelectorAll<HTMLElement>("[data-period-row]") ?? []);
+    rows.forEach((row, index) => {
+      const remove = row.querySelector<HTMLButtonElement>(".remove-period");
+      const start = row.querySelector<HTMLInputElement>("[name='daily-start']");
+      const end = row.querySelector<HTMLInputElement>("[name='daily-end']");
+      if (remove) {
+        remove.disabled = rows.length === 1;
+        remove.setAttribute("aria-label", `Supprimer la période ${index + 1}`);
+      }
+      start?.setAttribute("aria-label", `Début de la période ${index + 1}`);
+      end?.setAttribute("aria-label", `Fin de la période ${index + 1}`);
+    });
+  }
+
+  function replaceDailyRows(rows: Array<{ start: string; end: string }>) {
+    if (!dailyPeriods) return;
+    dailyPeriods.replaceChildren(...rows.map((row) => createPeriodRow(row.start, row.end)));
+    syncPeriodRows();
+  }
+
+  function updateDaily() {
+    const rows = Array.from(dailyPeriods?.querySelectorAll<HTMLElement>("[data-period-row]") ?? []);
+    let gross = 0;
+    let error = "";
+
+    for (const row of rows) {
+      const start = row.querySelector<HTMLInputElement>("[name='daily-start']")?.value ?? "";
+      const end = row.querySelector<HTMLInputElement>("[name='daily-end']")?.value ?? "";
+      if (!start || !end) {
+        error = "Ajoutez une heure de début et une heure de fin pour chaque plage.";
+        break;
+      }
+      const duration = calculateInterval(start, end);
+      if (duration === null) {
+        error = "Vérifiez le format des horaires saisis.";
+        break;
+      }
+      if (duration === 0) {
+        error = "L'heure de début et l'heure de fin doivent être différentes.";
+        break;
+      }
+      gross += duration;
+    }
+
+    const pauseValue = document.querySelector<HTMLInputElement>("#daily-break")?.value ?? "00:00";
+    const pause = parseTime(pauseValue) ?? 0;
+    if (!error && pause > gross) error = "La pause ne peut pas dépasser le temps saisi.";
+    const total = error ? 0 : Math.max(0, gross - pause);
+
+    setText("#daily-total", minutesToHHMM(total));
+    setText("#daily-decimal", `${formatFrenchDecimal(minutesToDecimal(total))} h`);
+    setText("#daily-minutes", `${total} min`);
+    setError("#daily-error", error);
+  }
+
+  document.querySelector("#add-daily-period")?.addEventListener("click", () => {
+    dailyPeriods?.append(createPeriodRow());
+    syncPeriodRows();
+    updateDaily();
+    saveState();
+    dailyPeriods?.querySelectorAll<HTMLInputElement>("input")[dailyPeriods.querySelectorAll("input").length - 2]?.focus();
+  });
+
+  dailyPeriods?.addEventListener("click", (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>(".remove-period");
+    if (!button || button.disabled) return;
+    button.closest("[data-period-row]")?.remove();
+    syncPeriodRows();
+    updateDaily();
+    saveState();
+  });
+
+  function updateWeek() {
+    let weekTotal = 0;
+    let firstError = "";
+    document.querySelectorAll<HTMLElement>("[data-week-day]").forEach((row) => {
+      const enabled = row.querySelector<HTMLInputElement>("[type='checkbox']");
+      const timeInputs = Array.from(row.querySelectorAll<HTMLInputElement>("input[type='time']"));
+      timeInputs.forEach((input) => { input.disabled = !(enabled?.checked); });
+      const output = row.querySelector<HTMLOutputElement>("[data-day-total]");
+      if (!enabled?.checked) {
+        if (output) output.textContent = "0 h 00";
+        return;
+      }
+
+      const [start, end, pauseInput] = timeInputs.map((input) => input.value);
+      const duration = calculateInterval(start, end);
+      const pause = parseTime(pauseInput) ?? 0;
+      let total = 0;
+      if (duration === null || duration === 0) {
+        firstError ||= `Vérifiez les horaires du ${row.dataset.weekDay}.`;
+      } else if (pause > duration) {
+        firstError ||= `La pause du ${row.dataset.weekDay} dépasse la durée travaillée.`;
+      } else {
+        total = duration - pause;
+      }
+      weekTotal += total;
+      if (output) output.textContent = minutesToHHMM(total);
+    });
+    setText("#weekly-total", minutesToHHMM(weekTotal));
+    setText("#weekly-decimal", `${formatFrenchDecimal(minutesToDecimal(weekTotal))} h décimales`);
+    setError("#weekly-error", firstError);
+  }
+
+  function updateSubtraction() {
+    const first = document.querySelector<HTMLInputElement>("#duration-one")?.value ?? "";
+    const second = document.querySelector<HTMLInputElement>("#duration-two")?.value ?? "";
+    const firstMinutes = parseDuration(first);
+    const secondMinutes = parseDuration(second);
+    const error = firstMinutes === null || secondMinutes === null
+      ? "Utilisez le format 17:45 ou 36h15."
+      : "";
+    setText("#subtraction-total", error ? "0 h 00" : minutesToHHMM(firstMinutes! - secondMinutes!));
+    setError("#subtraction-error", error);
+  }
+
+  function updateDurationConversion() {
+    const hours = Number(document.querySelector<HTMLInputElement>("#convert-hours")?.value);
+    const minutes = Number(document.querySelector<HTMLInputElement>("#convert-minutes")?.value);
+    const invalid = !Number.isInteger(hours) || hours < 0 || !Number.isInteger(minutes) || minutes < 0 || minutes > 59;
+    setText("#duration-decimal", invalid ? "0,00 h" : `${formatFrenchDecimal(hours + minutes / 60)} h`);
+    setError("#duration-converter-error", invalid ? "Saisissez des heures positives et des minutes entre 0 et 59." : "");
+  }
+
+  function updateDecimalConversion() {
+    const value = document.querySelector<HTMLInputElement>("#decimal-hours")?.value ?? "";
+    const decimal = parseFrenchDecimal(value);
+    setText("#decimal-duration", decimal === null ? "0 h 00" : minutesToHHMM(decimalToMinutes(decimal)));
+    setError("#decimal-converter-error", decimal === null ? "Saisissez une valeur comme 7,75." : "");
+  }
+
+  function collectState(): SavedState {
+    const activeTab = tabButtons.find((button) => button.getAttribute("aria-selected") === "true")?.dataset.tab;
+    const dailyRows = Array.from(dailyPeriods?.querySelectorAll<HTMLElement>("[data-period-row]") ?? []).map((row) => ({
+      start: row.querySelector<HTMLInputElement>("[name='daily-start']")?.value ?? "",
+      end: row.querySelector<HTMLInputElement>("[name='daily-end']")?.value ?? "",
+    }));
+    const weekly: Record<string, string | boolean> = {};
+    weeklyForm?.querySelectorAll<HTMLInputElement>("input").forEach((input) => {
+      weekly[input.name] = input.type === "checkbox" ? input.checked : input.value;
+    });
+    return {
+      activeTab,
+      daily: {
+        rows: dailyRows,
+        pause: document.querySelector<HTMLInputElement>("#daily-break")?.value,
+      },
+      weekly,
+      subtraction: {
+        first: document.querySelector<HTMLInputElement>("#duration-one")?.value,
+        second: document.querySelector<HTMLInputElement>("#duration-two")?.value,
+      },
+      conversion: {
+        hours: document.querySelector<HTMLInputElement>("#convert-hours")?.value,
+        minutes: document.querySelector<HTMLInputElement>("#convert-minutes")?.value,
+        decimal: document.querySelector<HTMLInputElement>("#decimal-hours")?.value,
+      },
+    };
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
+      const status = document.querySelector("#save-status");
+      if (status) status.textContent = "Enregistrement local activé";
+    } catch {
+      const status = document.querySelector("#save-status");
+      if (status) status.textContent = "Enregistrement local indisponible";
+    }
+  }
+
+  function setInputValue(selector: string, value?: string) {
+    const input = document.querySelector<HTMLInputElement>(selector);
+    if (input && typeof value === "string") input.value = value;
+  }
+
+  function restoreState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const state = JSON.parse(raw) as SavedState;
+      if (state.daily?.rows?.length) replaceDailyRows(state.daily.rows.slice(0, 12));
+      setInputValue("#daily-break", state.daily?.pause);
+      Object.entries(state.weekly ?? {}).forEach(([name, value]) => {
+        const input = weeklyForm?.elements.namedItem(name);
+        if (!(input instanceof HTMLInputElement)) return;
+        if (input.type === "checkbox") input.checked = Boolean(value);
+        else if (typeof value === "string") input.value = value;
+      });
+      setInputValue("#duration-one", state.subtraction?.first);
+      setInputValue("#duration-two", state.subtraction?.second);
+      setInputValue("#convert-hours", state.conversion?.hours);
+      setInputValue("#convert-minutes", state.conversion?.minutes);
+      setInputValue("#decimal-hours", state.conversion?.decimal);
+      if (state.activeTab) activateTab(state.activeTab);
+    } catch {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }
+
+  function updateAll() {
+    updateDaily();
+    updateWeek();
+    updateSubtraction();
+    updateDurationConversion();
+    updateDecimalConversion();
+  }
+
+  document.querySelector("#calculatrice")?.addEventListener("input", () => {
+    updateAll();
+    saveState();
+  });
+  document.querySelector("#calculatrice")?.addEventListener("change", () => {
+    updateAll();
+    saveState();
+  });
+
+  dailyForm?.addEventListener("reset", () => {
+    window.setTimeout(() => {
+      replaceDailyRows([
+        { start: "08:30", end: "12:00" },
+        { start: "13:00", end: "17:30" },
+      ]);
+      updateDaily();
+      saveState();
+    });
+  });
+  weeklyForm?.addEventListener("reset", () => window.setTimeout(() => { updateWeek(); saveState(); }));
+  subtractionForm?.addEventListener("reset", () => window.setTimeout(() => { updateSubtraction(); saveState(); }));
+  durationConverter?.addEventListener("reset", () => window.setTimeout(() => { updateDurationConversion(); saveState(); }));
+  decimalConverter?.addEventListener("reset", () => window.setTimeout(() => { updateDecimalConversion(); saveState(); }));
+
+  document.querySelectorAll<HTMLButtonElement>(".copy-result").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const output = document.getElementById(button.dataset.copyTarget ?? "")?.textContent?.trim() ?? "";
+      const original = button.textContent ?? "Copier";
+      try {
+        await navigator.clipboard.writeText(output);
+        button.textContent = "Copié";
+      } catch {
+        button.textContent = "Copie indisponible";
+      }
+      window.setTimeout(() => { button.textContent = original; }, 1400);
+    });
+  });
+
+  document.querySelectorAll(".print-result").forEach((button) => button.addEventListener("click", () => window.print()));
+
+  document.querySelector("#clear-saved-data")?.addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    window.location.reload();
+  });
+
+  document.querySelectorAll<HTMLElement>("[data-open-tab]").forEach((link) => {
+    link.addEventListener("click", () => {
+      activateTab(link.dataset.openTab ?? "journee", true);
+      document.querySelector("#calculatrice")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  document.querySelector("#load-example")?.addEventListener("click", () => {
+    replaceDailyRows([
+      { start: "08:30", end: "12:00" },
+      { start: "13:00", end: "17:30" },
+    ]);
+    setInputValue("#daily-break", "00:00");
+    activateTab("journee", true);
+    updateDaily();
+    saveState();
+    document.querySelector("#calculatrice")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  const initialHash = window.location.hash.slice(1);
+  restoreState();
+  if (["journee", "semaine", "soustraction", "conversion"].includes(initialHash)) activateTab(initialHash);
+  syncPeriodRows();
+  updateAll();
+</script>

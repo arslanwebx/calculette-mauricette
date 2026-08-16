@@ -1,0 +1,72 @@
+---
+const days = [
+  ["lundi", "Lundi"],
+  ["mardi", "Mardi"],
+  ["mercredi", "Mercredi"],
+  ["jeudi", "Jeudi"],
+  ["vendredi", "Vendredi"],
+  ["samedi", "Samedi"],
+  ["dimanche", "Dimanche"],
+];
+---
+
+<section
+  class="calculator-panel"
+  id="semaine"
+  role="tabpanel"
+  aria-labelledby="tab-semaine"
+  data-panel="semaine"
+  hidden
+>
+  <form id="weekly-form" novalidate>
+    <div class="panel-heading">
+      <div>
+        <h2>Votre semaine</h2>
+        <p>Activez les jours travaillés. La pause est déduite une seule fois par jour.</p>
+      </div>
+    </div>
+
+    <div class="week-head" aria-hidden="true">
+      <span>Jour</span><span>Début</span><span>Fin</span><span>Pause</span><span>Total</span>
+    </div>
+    <div class="week-list">
+      {days.map(([key, label], index) => (
+        <fieldset class:list={["week-row", { "is-weekend": index > 4 }]} data-week-day={key}>
+          <legend class="sr-only">{label}</legend>
+          <label class="day-toggle">
+            <input type="checkbox" name={`${key}-enabled`} checked={index < 5} />
+            <span>{label}</span>
+          </label>
+          <label>
+            <span class="mobile-field-label">Début</span>
+            <input type="time" name={`${key}-start`} value="08:30" disabled={index > 4} />
+          </label>
+          <label>
+            <span class="mobile-field-label">Fin</span>
+            <input type="time" name={`${key}-end`} value="17:30" disabled={index > 4} />
+          </label>
+          <label>
+            <span class="mobile-field-label">Pause</span>
+            <input type="time" name={`${key}-break`} value="01:00" disabled={index > 4} />
+          </label>
+          <output class="day-total" data-day-total>{index < 5 ? "8 h 00" : "0 h 00"}</output>
+        </fieldset>
+      ))}
+    </div>
+    <p class="form-error" id="weekly-error" role="alert" hidden></p>
+
+    <div class="weekly-summary">
+      <div>
+        <span>Total semaine</span>
+        <output id="weekly-total" aria-live="polite">40 h 00</output>
+        <small id="weekly-decimal">40,00 h décimales</small>
+      </div>
+      <div class="result-actions">
+        <button type="button" class="button button--small copy-result" data-copy-target="weekly-total">Copier le total</button>
+        <button type="button" class="button button--small button--quiet print-result">Imprimer</button>
+        <button type="reset" class="button button--small button--quiet">Réinitialiser</button>
+      </div>
+    </div>
+  </form>
+</section>
+

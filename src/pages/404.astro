@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const title = "Page introuvable | Calculette Mauricette";
+const description = "Cette page n'existe pas ou a été déplacée.";
+---
+
+<BaseLayout {title} {description} noindex>
+  <div id="top"></div>
+  <Header />
+  <main id="contenu" class="not-found page-shell">
+    <div>
+      <h1>Cette page est introuvable</h1>
+      <p>L'adresse demandée n'existe pas. Revenez à la calculatrice pour calculer vos heures de travail.</p>
+      <a class="button" href="/">Retour à la calculatrice</a>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

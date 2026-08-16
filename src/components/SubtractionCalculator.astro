@@ -1,0 +1,34 @@
+<section
+  class="calculator-panel"
+  id="soustraction"
+  role="tabpanel"
+  aria-labelledby="tab-soustraction"
+  data-panel="soustraction"
+  hidden
+>
+  <div class="compact-tool-layout">
+    <form id="subtraction-form" class="compact-form" novalidate>
+      <div class="panel-heading">
+        <div>
+          <h2>Soustraire deux durées</h2>
+          <p>Saisissez une durée au format 17:45 ou 36h15.</p>
+        </div>
+      </div>
+      <label for="duration-one">Heure ou durée 1</label>
+      <input id="duration-one" name="duration-one" type="text" inputmode="text" value="17:45" />
+      <span class="operator" aria-hidden="true">−</span>
+      <label for="duration-two">Heure ou durée 2</label>
+      <input id="duration-two" name="duration-two" type="text" inputmode="text" value="08:30" />
+      <p class="form-error" id="subtraction-error" role="alert" hidden></p>
+    </form>
+    <aside class="result-card result-card--compact">
+      <p class="result-label">Différence</p>
+      <output class="result-primary" id="subtraction-total" form="subtraction-form" aria-live="polite">9 h 15</output>
+      <div class="result-actions">
+        <button type="button" class="button button--small copy-result" data-copy-target="subtraction-total">Copier</button>
+        <button type="reset" class="button button--small button--quiet" form="subtraction-form">Réinitialiser</button>
+      </div>
+    </aside>
+  </div>
+</section>
+

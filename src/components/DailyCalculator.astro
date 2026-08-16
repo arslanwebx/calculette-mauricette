@@ -1,0 +1,89 @@
+<section
+  class="calculator-panel is-active"
+  id="journee"
+  role="tabpanel"
+  aria-labelledby="tab-journee"
+  data-panel="journee"
+>
+  <div class="calculator-grid">
+    <form class="calculator-form" id="daily-form" novalidate>
+      <div class="panel-heading">
+        <div>
+          <h2>Votre journée</h2>
+          <p>Ajoutez une ligne pour chaque période réellement travaillée.</p>
+        </div>
+        <span class="overnight-note">Après minuit accepté</span>
+      </div>
+
+      <div class="period-labels" aria-hidden="true">
+        <span>Début</span>
+        <span>Fin</span>
+        <span></span>
+      </div>
+      <div id="daily-periods" class="period-list">
+        <div class="period-row" data-period-row>
+          <label>
+            <span class="mobile-field-label">Début</span>
+            <input type="time" name="daily-start" value="08:30" aria-label="Début de la période 1" required />
+          </label>
+          <span class="time-arrow" aria-hidden="true">→</span>
+          <label>
+            <span class="mobile-field-label">Fin</span>
+            <input type="time" name="daily-end" value="12:00" aria-label="Fin de la période 1" required />
+          </label>
+          <button class="icon-button remove-period" type="button" aria-label="Supprimer la période 1" disabled>
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="period-row" data-period-row>
+          <label>
+            <span class="mobile-field-label">Début</span>
+            <input type="time" name="daily-start" value="13:00" aria-label="Début de la période 2" required />
+          </label>
+          <span class="time-arrow" aria-hidden="true">→</span>
+          <label>
+            <span class="mobile-field-label">Fin</span>
+            <input type="time" name="daily-end" value="17:30" aria-label="Fin de la période 2" required />
+          </label>
+          <button class="icon-button remove-period" type="button" aria-label="Supprimer la période 2">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="text-button" type="button" id="add-daily-period">
+        <span aria-hidden="true">+</span> Ajouter une plage horaire
+      </button>
+
+      <div class="break-field">
+        <label for="daily-break">Pause à déduire</label>
+        <input id="daily-break" name="daily-break" type="time" value="00:00" min="00:00" max="23:59" />
+        <p>Utilisez ce champ seulement si la pause n'est pas déjà exclue entre deux plages.</p>
+      </div>
+
+      <p class="form-error" id="daily-error" role="alert" hidden></p>
+    </form>
+
+    <aside class="result-card" aria-label="Résultat de la journée">
+      <div>
+        <p class="result-label">Temps total</p>
+        <output class="result-primary" id="daily-total" form="daily-form" aria-live="polite">8 h 00</output>
+      </div>
+      <div class="result-secondary">
+        <span>Heures décimales</span>
+        <output id="daily-decimal" form="daily-form">8,00 h</output>
+      </div>
+      <div class="result-secondary">
+        <span>Durée en minutes</span>
+        <output id="daily-minutes" form="daily-form">480 min</output>
+      </div>
+      <div class="result-actions">
+        <button type="button" class="button button--small copy-result" data-copy-target="daily-total">Copier</button>
+        <button type="button" class="button button--small button--quiet print-result">Imprimer</button>
+        <button type="reset" class="button button--small button--quiet" form="daily-form">Réinitialiser</button>
+      </div>
+      <p class="local-note">Vos horaires restent uniquement dans votre navigateur.</p>
+    </aside>
+  </div>
+</section>
+

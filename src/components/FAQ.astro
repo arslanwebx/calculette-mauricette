@@ -1,0 +1,42 @@
+---
+const faqs = [
+  {
+    question: "Qu'est-ce qu'une Calculette Mauricette ?",
+    answer: "C'est un outil de calcul du temps de travail. Elle additionne des plages horaires, déduit une pause et affiche le total en heures, minutes et heures décimales.",
+  },
+  {
+    question: "Quelle différence entre calculette Mauricette et calculatrice Mauricette ?",
+    answer: "Ces deux expressions désignent généralement le même type d'outil. Le mot calculette insiste sur la simplicité, tandis que calculatrice décrit la même fonction de calcul des horaires.",
+  },
+  {
+    question: "Comment calculer 7 h 30 en heures décimales ?",
+    answer: "Divisez 30 minutes par 60. Vous obtenez 0,50, donc 7 h 30 correspondent à 7,50 heures décimales.",
+  },
+  {
+    question: "Comment retirer une pause de mes heures de travail ?",
+    answer: "Saisissez votre heure de début et de fin, puis indiquez la durée de la pause. Si vous avez déjà séparé le matin et l'après-midi en deux plages, laissez la pause à zéro pour éviter une double déduction.",
+  },
+  {
+    question: "Puis-je calculer une plage horaire qui passe après minuit ?",
+    answer: "Oui. Une plage de 21:00 à 06:00 est reconnue comme une durée de 9 heures, sans résultat négatif.",
+  },
+  {
+    question: "Mes horaires sont-ils envoyés sur un serveur ?",
+    answer: "Non. Les calculs et l'enregistrement automatique restent dans votre navigateur. Vous pouvez effacer les données locales à tout moment.",
+  },
+];
+---
+
+<section class="content-section faq-section" id="faq" aria-labelledby="faq-title">
+  <div class="section-heading">
+    <h2 id="faq-title">Questions fréquentes</h2>
+  </div>
+  <div class="faq-list">
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.question}</summary>
+        <p>{faq.answer}</p>
+      </details>
+    ))}
+  </div>
+</section>

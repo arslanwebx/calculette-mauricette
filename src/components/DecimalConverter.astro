@@ -1,0 +1,36 @@
+<section
+  class="calculator-panel"
+  id="conversion"
+  role="tabpanel"
+  aria-labelledby="tab-conversion"
+  data-panel="conversion"
+  hidden
+>
+  <div class="converter-grid">
+    <form class="converter-block" id="duration-converter" novalidate>
+      <h2>Heures et minutes vers décimal</h2>
+      <label for="convert-hours">Durée</label>
+      <div class="inline-fields">
+        <input id="convert-hours" name="convert-hours" type="number" min="0" step="1" value="7" aria-label="Heures" />
+        <span>h</span>
+        <input id="convert-minutes" name="convert-minutes" type="number" min="0" max="59" step="1" value="30" aria-label="Minutes" />
+        <span>min</span>
+      </div>
+      <p class="conversion-result"><span>=</span> <output id="duration-decimal" aria-live="polite">7,50 h</output></p>
+      <p class="form-error" id="duration-converter-error" role="alert" hidden></p>
+    </form>
+
+    <form class="converter-block" id="decimal-converter" novalidate>
+      <h2>Heures décimales vers heures et minutes</h2>
+      <label for="decimal-hours">Heures décimales</label>
+      <div class="inline-fields inline-fields--decimal">
+        <input id="decimal-hours" name="decimal-hours" type="text" inputmode="decimal" value="7,75" />
+        <span>h</span>
+      </div>
+      <p class="conversion-result"><span>=</span> <output id="decimal-duration" aria-live="polite">7 h 45</output></p>
+      <p class="form-error" id="decimal-converter-error" role="alert" hidden></p>
+    </form>
+  </div>
+  <p class="conversion-explainer"><strong>7 h 30 ≠ 7,30 h.</strong> Trente minutes représentent la moitié d'une heure, soit 0,50.</p>
+</section>
+

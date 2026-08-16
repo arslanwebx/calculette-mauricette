@@ -1,0 +1,65 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+const siteUrl = Astro.site?.origin;
+const canonical = !noindex && siteUrl ? new URL(Astro.url.pathname, `${siteUrl}/`).href : undefined;
+
+const structuredData = noindex ? [] : [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    ...(siteUrl ? { url: siteUrl } : {}),
+    name: "Calculette Mauricette",
+    inLanguage: "fr-FR",
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    ...(canonical ? { url: canonical } : {}),
+    name: "Calculette Mauricette",
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Tout système avec un navigateur web",
+    browserRequirements: "JavaScript activé",
+    inLanguage: "fr-FR",
+    isAccessibleForFree: true,
+    description,
+  },
+];
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#f5f7f4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#101815" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    {!noindex && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+    <slot />
+  </body>
+</html>

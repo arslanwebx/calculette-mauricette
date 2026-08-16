@@ -1,0 +1,133 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import MauricetteCalculator from "../components/MauricetteCalculator.astro";
+import RelatedTools from "../components/RelatedTools.astro";
+import FAQ from "../components/FAQ.astro";
+import Footer from "../components/Footer.astro";
+
+const title = "Calculette Mauricette - Calculatrice d'heures de travail";
+const description = "Calculez vos heures de travail avec la Calculette Mauricette : journées, semaines, pauses, soustractions et conversion en heures décimales. Gratuit.";
+---
+
+<BaseLayout {title} {description}>
+  <div id="top"></div>
+  <Header />
+  <main id="contenu">
+    <section class="hero page-shell" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <h1 id="page-title">Calculette Mauricette : calculez vos heures de travail</h1>
+        <p class="hero-intro">Additionnez vos heures de travail, retirez vos pauses et obtenez instantanément votre total en heures, minutes et format décimal.</p>
+        <p class="hero-detail">Notre calculatrice Mauricette fonctionne pour une journée, une semaine complète ou plusieurs plages horaires.</p>
+      </div>
+    </section>
+
+    <div class="page-shell calculator-wrap">
+      <MauricetteCalculator />
+    </div>
+
+    <div class="page-shell content-flow">
+      <section class="content-section how-section" id="fonctionnement" aria-labelledby="how-title">
+        <div class="section-heading">
+          <h2 id="how-title">Comment utiliser la Calculette Mauricette ?</h2>
+          <p>Trois gestes suffisent pour obtenir un total vérifiable.</p>
+        </div>
+        <ol class="how-list">
+          <li>
+            <span aria-hidden="true">1</span>
+            <div><h3>Saisissez vos horaires</h3><p>Indiquez votre heure de début et votre heure de fin.</p></div>
+          </li>
+          <li>
+            <span aria-hidden="true">2</span>
+            <div><h3>Ajoutez les autres plages</h3><p>Ajoutez une reprise après déjeuner ou plusieurs périodes de travail.</p></div>
+          </li>
+          <li>
+            <span aria-hidden="true">3</span>
+            <div><h3>Consultez votre total</h3><p>Mauricette affiche le résultat en heures, minutes et heures décimales.</p></div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="content-section example-section" aria-labelledby="example-title">
+        <div class="example-copy">
+          <h2 id="example-title">Exemple de calcul d'une journée</h2>
+          <p>La coupure du déjeuner est déjà exclue grâce aux deux plages. Il ne faut donc pas ajouter une seconde pause.</p>
+          <button class="button" id="load-example" type="button">Tester cet exemple</button>
+        </div>
+        <div class="example-table-wrap">
+          <table>
+            <caption class="sr-only">Exemple de calcul avec une plage le matin et une plage l'après-midi</caption>
+            <tbody>
+              <tr><th scope="row">Matin</th><td>08:30 → 12:00</td><td>3 h 30</td></tr>
+              <tr><th scope="row">Après-midi</th><td>13:00 → 17:30</td><td>4 h 30</td></tr>
+              <tr class="table-total"><th scope="row">Total</th><td>8 h 00</td><td>8,00 h</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="content-section decimal-section" aria-labelledby="decimal-title">
+        <div class="section-heading">
+          <h2 id="decimal-title">Comment convertir les heures en centièmes ?</h2>
+          <p>Divisez les minutes par 60 pour obtenir la fraction décimale d'une heure. Ainsi, 30 ÷ 60 = 0,50 et 7 h 30 = 7,50 h.</p>
+        </div>
+        <div class="decimal-layout">
+          <div class="formula-block">
+            <strong>Minutes ÷ 60</strong>
+            <span>fraction décimale d'une heure</span>
+            <p>Le chiffre après la virgule n'est pas un nombre de minutes. Par exemple, 7,30 h correspond à 7 h 18, pas à 7 h 30.</p>
+            <button class="text-button" type="button" data-open-tab="conversion">Ouvrir le convertisseur</button>
+          </div>
+          <div class="conversion-table-wrap">
+            <table>
+              <thead><tr><th scope="col">Minutes</th><th scope="col">Heure décimale</th></tr></thead>
+              <tbody>
+                <tr><td>5 min</td><td>0,08</td></tr>
+                <tr><td>10 min</td><td>0,17</td></tr>
+                <tr><td>15 min</td><td>0,25</td></tr>
+                <tr><td>20 min</td><td>0,33</td></tr>
+                <tr><td>30 min</td><td>0,50</td></tr>
+                <tr><td>45 min</td><td>0,75</td></tr>
+                <tr><td>60 min</td><td>1,00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="coming-soon">Tableau complet des heures et centièmes : bientôt disponible.</p>
+      </section>
+
+      <section class="content-section practical-section" aria-labelledby="practical-title">
+        <div class="practical-main">
+          <h2 id="practical-title">Pourquoi utiliser une calculatrice Mauricette ?</h2>
+          <p>Additionner des heures à la main devient vite imprécis dès qu'une journée comporte une pause, une reprise ou un passage après minuit. La calculette évite les retenues et les conversions faites de tête.</p>
+          <p>Le mode semaine regroupe les totaux quotidiens et prépare une vérification de feuille d'heures. Le format décimal est utile lorsqu'un logiciel attend 7,50 plutôt que 7 h 30.</p>
+        </div>
+        <div class="calculation-note">
+          <h3>La formule générale</h3>
+          <p><strong>Heure de fin - heure de début - pauses = temps travaillé</strong></p>
+          <p>Avec plusieurs périodes, calculez chaque durée séparément, puis additionnez-les. Une fin antérieure au début est considérée comme un passage après minuit.</p>
+        </div>
+      </section>
+
+      <section class="content-section legal-section" id="reperes" aria-labelledby="legal-title">
+        <div>
+          <h2 id="legal-title">Temps de travail en France : repères utiles</h2>
+          <p>Pour un salarié majeur à temps plein du secteur privé, la durée légale est fixée à 35 heures par semaine. Ce repère n'est pas une durée maximale et des dispositions conventionnelles peuvent prévoir une organisation différente.</p>
+          <p>Le même guide officiel indique qu'une pause d'au moins 20 minutes consécutives doit être accordée après 6 heures de travail consécutives. Le calculateur mesure des durées, il ne détermine pas à lui seul vos droits ni votre rémunération.</p>
+          <p class="disclaimer">Ces informations sont générales. Les règles applicables peuvent varier selon votre contrat, votre convention collective ou un accord d'entreprise.</p>
+        </div>
+        <aside class="source-note" aria-label="Sources officielles">
+          <h3>Sources officielles</h3>
+          <a href="https://www.service-public.gouv.fr/particuliers/vosdroits/F1911" rel="external">Service-Public.fr : durée du travail à temps plein</a>
+          <a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000033020376" rel="external">Legifrance : Code du travail</a>
+          <span>Informations consultées le 16 août 2026.</span>
+        </aside>
+      </section>
+
+      <RelatedTools />
+      <FAQ />
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
