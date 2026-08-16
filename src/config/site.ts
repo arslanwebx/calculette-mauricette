@@ -1,4 +1,5 @@
 const readPublicValue = (value: string | undefined) => value?.trim() ?? "";
+const defaultContactEmail = "contact@calculette-mauricette.pro";
 
 export const siteConfig = {
   name: "Calculette Mauricette",
@@ -10,7 +11,7 @@ export const siteConfig = {
     type: readPublicValue(import.meta.env.PUBLIC_PUBLISHER_TYPE),
   },
   contact: {
-    email: readPublicValue(import.meta.env.PUBLIC_CONTACT_EMAIL),
+    email: readPublicValue(import.meta.env.PUBLIC_CONTACT_EMAIL) || defaultContactEmail,
     formEndpoint: readPublicValue(import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT),
     formProvider: readPublicValue(import.meta.env.PUBLIC_CONTACT_FORM_PROVIDER),
   },

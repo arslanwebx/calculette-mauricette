@@ -86,7 +86,7 @@ Le domaine de production est déjà le réglage par défaut. La variable reste d
 PUBLIC_SITE_URL=https://calculette-mauricette.pro
 PUBLIC_PUBLISHER_NAME=
 PUBLIC_PUBLISHER_TYPE=
-PUBLIC_CONTACT_EMAIL=
+PUBLIC_CONTACT_EMAIL=contact@calculette-mauricette.pro
 PUBLIC_CONTACT_FORM_ENDPOINT=
 PUBLIC_CONTACT_FORM_PROVIDER=
 ```
@@ -99,7 +99,7 @@ Les mentions légales ne fabriquent aucune identité. Renseignez dans Cloudflare
 
 - `PUBLIC_PUBLISHER_NAME` : nom réel de l'éditeur ;
 - `PUBLIC_PUBLISHER_TYPE` : particulier, entreprise individuelle, société ou autre qualité exacte ;
-- `PUBLIC_CONTACT_EMAIL` : adresse publique de contact, si elle doit être affichée.
+- `PUBLIC_CONTACT_EMAIL` : adresse publique de contact. Par défaut : `contact@calculette-mauricette.pro`.
 
 Le formulaire reste désactivé tant que `PUBLIC_CONTACT_FORM_ENDPOINT` est vide. Pour l'activer, fournissez l'URL réelle d'un service acceptant les champs `name`, `email`, `subject` et `message`, puis indiquez son nom dans `PUBLIC_CONTACT_FORM_PROVIDER`. Vérifiez le traitement et la conservation des messages, puis ajustez la politique de confidentialité si nécessaire.
 

@@ -1,3 +1,7 @@
+---
+import { siteConfig } from "../config/site";
+---
+
 <footer class="site-footer">
   <div class="page-shell footer-layout">
     <div class="footer-brand">
@@ -6,6 +10,7 @@
         <strong>Mauricette</strong>
       </a>
       <p>Un outil simple pour calculer vos heures de travail, vos pauses et vos totaux.</p>
+      <a class="footer-contact-email" href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>
     </div>
     <nav class="footer-nav-group" aria-label="Navigation du site">
       <strong>Navigation</strong>

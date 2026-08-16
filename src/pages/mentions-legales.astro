@@ -28,7 +28,7 @@ const publisherConfigured = Boolean(siteConfig.publisher.name && siteConfig.publ
         <p>L'identité et la qualité juridique du responsable n'ont pas été fournies. Elles ne sont pas remplacées par un nom ou un numéro inventé. Le propriétaire du site doit renseigner la configuration prévue à cet effet.</p>
       </div>
     )}
-    <p>Pour une demande concernant le site, utilisez la <a href="/contact/">page de contact</a>.</p>
+    <p>Pour une demande concernant le site, écrivez à <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a> ou utilisez la <a href="/contact/">page de contact</a>.</p>
   </section>
 
   <section>
