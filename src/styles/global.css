@@ -1498,13 +1498,19 @@ th:last-child {
 
   .calculator-titlebar {
     align-items: flex-start;
+    flex-wrap: wrap;
     padding: 1rem;
+  }
+
+  .calculator-titlebar > div {
+    min-width: 0;
   }
 
   .clear-data-button {
     min-height: 44px;
-    max-width: 92px;
-    padding: 0;
+    max-width: 118px;
+    margin-left: auto;
+    padding: 0.45rem 0.55rem;
     line-height: 1.25;
     text-align: right;
   }
@@ -1555,7 +1561,7 @@ th:last-child {
   }
 
   .result-card {
-    min-height: 250px;
+    min-height: 0;
   }
 
   .result-actions .button {
@@ -1625,6 +1631,45 @@ th:last-child {
 
   .footer-brand {
     grid-column: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .calculator-panel {
+    padding: 0.8rem;
+  }
+
+  .period-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .period-row .time-arrow {
+    display: none;
+  }
+
+  .period-row .remove-period {
+    grid-column: 1 / -1;
+    width: auto;
+    height: 42px;
+    justify-self: end;
+    padding-inline: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .period-row .remove-period::after {
+    content: "Supprimer";
+    margin-left: 0.35rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+
+  .break-field {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .break-field input {
+    max-width: none;
   }
 }
 
