@@ -39,15 +39,15 @@ const days = [
           </label>
           <label>
             <span class="mobile-field-label">Début</span>
-            <input type="time" name={`${key}-start`} value="08:30" disabled={index > 4} />
+            <input type="time" name={`${key}-start`} value="08:30" disabled={index > 4} aria-describedby="weekly-error" />
           </label>
           <label>
             <span class="mobile-field-label">Fin</span>
-            <input type="time" name={`${key}-end`} value="17:30" disabled={index > 4} />
+            <input type="time" name={`${key}-end`} value="17:30" disabled={index > 4} aria-describedby="weekly-error" />
           </label>
           <label>
             <span class="mobile-field-label">Pause</span>
-            <input type="time" name={`${key}-break`} value="01:00" disabled={index > 4} />
+            <input type="time" name={`${key}-break`} value="01:00" disabled={index > 4} aria-describedby="weekly-error" />
           </label>
           <output class="day-total" data-day-total>{index < 5 ? "8 h 00" : "0 h 00"}</output>
         </fieldset>
@@ -69,4 +69,3 @@ const days = [
     </div>
   </form>
 </section>
-

@@ -15,10 +15,10 @@
         </div>
       </div>
       <label for="duration-one">Heure ou durée 1</label>
-      <input id="duration-one" name="duration-one" type="text" inputmode="text" value="17:45" />
+      <input id="duration-one" name="duration-one" type="text" inputmode="text" value="17:45" aria-describedby="subtraction-error" />
       <span class="operator" aria-hidden="true">−</span>
       <label for="duration-two">Heure ou durée 2</label>
-      <input id="duration-two" name="duration-two" type="text" inputmode="text" value="08:30" />
+      <input id="duration-two" name="duration-two" type="text" inputmode="text" value="08:30" aria-describedby="subtraction-error" />
       <p class="form-error" id="subtraction-error" role="alert" hidden></p>
     </form>
     <aside class="result-card result-card--compact">
@@ -31,4 +31,3 @@
     </aside>
   </div>
 </section>
-

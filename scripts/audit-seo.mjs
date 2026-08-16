@@ -75,6 +75,22 @@ for (const page of pages) {
   if (robotTags.length !== 1) fail(`${route}: directive robots absente ou dupliquée`);
   if (h1Matches.length !== 1) fail(`${route}: ${h1Matches.length} H1 trouvé(s), 1 attendu`);
 
+  const idValues = [...html.matchAll(/\bid=(?:"([^"]+)"|'([^']+)')/gi)].map((match) => match[1] ?? match[2]);
+  const idSet = new Set(idValues);
+  if (idSet.size !== idValues.length) fail(`${route}: identifiant HTML dupliqué`);
+
+  for (const label of html.matchAll(/<label\b[^>]*\bfor=(?:"([^"]+)"|'([^']+)')[^>]*>/gi)) {
+    const targetId = label[1] ?? label[2];
+    if (!idSet.has(targetId)) fail(`${route}: label sans champ associé (${targetId})`);
+  }
+
+  for (const reference of html.matchAll(/\b(?:aria-controls|aria-describedby|aria-labelledby)=(?:"([^"]+)"|'([^']+)')/gi)) {
+    const targetIds = (reference[1] ?? reference[2]).split(/\s+/).filter(Boolean);
+    for (const targetId of targetIds) {
+      if (!idSet.has(targetId)) fail(`${route}: référence ARIA absente (${targetId})`);
+    }
+  }
+
   const readableText = html
     .replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ")
     .replace(/<[^>]+>/g, " ")

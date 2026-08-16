@@ -5,12 +5,12 @@ const currentPath = Astro.url.pathname;
 <header class="site-header">
   <div class="site-header__inner page-shell">
     <a class="wordmark" href="/" aria-label="Calculette Mauricette, accueil">
-      <span class="wordmark__mark" aria-hidden="true">M</span>
-      <span>Mauricette</span>
+      <span>Calculette</span>
+      <strong>Mauricette</strong>
     </a>
 
     <nav class="desktop-nav" aria-label="Navigation principale">
-      <a href="/#calculatrice">Calculatrice</a>
+      <a href="/#calculatrice" aria-current={currentPath === "/" ? "page" : undefined}>Calculatrice</a>
       <a href="/#fonctionnement">Comment ça marche</a>
       <a href="/a-propos/" aria-current={currentPath === "/a-propos/" ? "page" : undefined}>À propos</a>
       <a class="header-contact" href="/contact/" aria-current={currentPath === "/contact/" ? "page" : undefined}>Contact</a>
@@ -19,7 +19,7 @@ const currentPath = Astro.url.pathname;
     <details class="mobile-menu">
       <summary>Menu</summary>
       <nav aria-label="Navigation mobile">
-        <a href="/#calculatrice">Calculatrice</a>
+        <a href="/#calculatrice" aria-current={currentPath === "/" ? "page" : undefined}>Calculatrice</a>
         <a href="/#fonctionnement">Comment ça marche</a>
         <a href="/a-propos/" aria-current={currentPath === "/a-propos/" ? "page" : undefined}>À propos</a>
         <a class="mobile-contact-link" href="/contact/" aria-current={currentPath === "/contact/" ? "page" : undefined}>Contact</a>

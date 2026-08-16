@@ -12,7 +12,7 @@
           <h2>Votre journée</h2>
           <p>Ajoutez une ligne pour chaque période réellement travaillée.</p>
         </div>
-        <span class="overnight-note">Après minuit accepté</span>
+        <span class="overnight-note">Les horaires après minuit sont pris en charge.</span>
       </div>
 
       <div class="period-labels" aria-hidden="true">
@@ -24,12 +24,12 @@
         <div class="period-row" data-period-row>
           <label>
             <span class="mobile-field-label">Début</span>
-            <input type="time" name="daily-start" value="08:30" aria-label="Début de la période 1" required />
+            <input type="time" name="daily-start" value="08:30" aria-label="Début de la période 1" aria-describedby="daily-error" required />
           </label>
           <span class="time-arrow" aria-hidden="true">→</span>
           <label>
             <span class="mobile-field-label">Fin</span>
-            <input type="time" name="daily-end" value="12:00" aria-label="Fin de la période 1" required />
+            <input type="time" name="daily-end" value="12:00" aria-label="Fin de la période 1" aria-describedby="daily-error" required />
           </label>
           <button class="icon-button remove-period" type="button" aria-label="Supprimer la période 1" disabled>
             <span aria-hidden="true">×</span>
@@ -38,12 +38,12 @@
         <div class="period-row" data-period-row>
           <label>
             <span class="mobile-field-label">Début</span>
-            <input type="time" name="daily-start" value="13:00" aria-label="Début de la période 2" required />
+            <input type="time" name="daily-start" value="13:00" aria-label="Début de la période 2" aria-describedby="daily-error" required />
           </label>
           <span class="time-arrow" aria-hidden="true">→</span>
           <label>
             <span class="mobile-field-label">Fin</span>
-            <input type="time" name="daily-end" value="17:30" aria-label="Fin de la période 2" required />
+            <input type="time" name="daily-end" value="17:30" aria-label="Fin de la période 2" aria-describedby="daily-error" required />
           </label>
           <button class="icon-button remove-period" type="button" aria-label="Supprimer la période 2">
             <span aria-hidden="true">×</span>
@@ -57,7 +57,7 @@
 
       <div class="break-field">
         <label for="daily-break">Pause à déduire</label>
-        <input id="daily-break" name="daily-break" type="time" value="00:00" min="00:00" max="23:59" />
+        <input id="daily-break" name="daily-break" type="time" value="00:00" min="00:00" max="23:59" aria-describedby="daily-error" />
         <p>Utilisez ce champ seulement si la pause n'est pas déjà exclue entre deux plages.</p>
       </div>
 
@@ -86,4 +86,3 @@
     </aside>
   </div>
 </section>
-

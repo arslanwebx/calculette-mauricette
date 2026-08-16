@@ -71,6 +71,10 @@ import DecimalConverter from "./DecimalConverter.astro";
     element.hidden = !message;
   }
 
+  function setInvalid(input: HTMLInputElement | null | undefined, invalid: boolean) {
+    input?.setAttribute("aria-invalid", String(invalid));
+  }
+
   function activateTab(tabName: string, updateHash = false) {
     const target = tabButtons.find((button) => button.dataset.tab === tabName);
     if (!target) return;
@@ -112,12 +116,12 @@ import DecimalConverter from "./DecimalConverter.astro";
     row.innerHTML = `
       <label>
         <span class="mobile-field-label">Début</span>
-        <input type="time" name="daily-start" value="${start}" aria-label="Début de la période ${index}" required>
+        <input type="time" name="daily-start" value="${start}" aria-label="Début de la période ${index}" aria-describedby="daily-error" required>
       </label>
       <span class="time-arrow" aria-hidden="true">→</span>
       <label>
         <span class="mobile-field-label">Fin</span>
-        <input type="time" name="daily-end" value="${end}" aria-label="Fin de la période ${index}" required>
+        <input type="time" name="daily-end" value="${end}" aria-label="Fin de la période ${index}" aria-describedby="daily-error" required>
       </label>
       <button class="icon-button remove-period" type="button" aria-label="Supprimer la période ${index}">
         <span aria-hidden="true">×</span>
@@ -151,28 +155,46 @@ import DecimalConverter from "./DecimalConverter.astro";
     let gross = 0;
     let error = "";
 
+    rows.forEach((row) => {
+      setInvalid(row.querySelector<HTMLInputElement>("[name='daily-start']"), false);
+      setInvalid(row.querySelector<HTMLInputElement>("[name='daily-end']"), false);
+    });
+    const pauseInput = document.querySelector<HTMLInputElement>("#daily-break");
+    setInvalid(pauseInput, false);
+
     for (const row of rows) {
-      const start = row.querySelector<HTMLInputElement>("[name='daily-start']")?.value ?? "";
-      const end = row.querySelector<HTMLInputElement>("[name='daily-end']")?.value ?? "";
+      const startInput = row.querySelector<HTMLInputElement>("[name='daily-start']");
+      const endInput = row.querySelector<HTMLInputElement>("[name='daily-end']");
+      const start = startInput?.value ?? "";
+      const end = endInput?.value ?? "";
       if (!start || !end) {
+        setInvalid(startInput, !start);
+        setInvalid(endInput, !end);
         error = "Ajoutez une heure de début et une heure de fin pour chaque plage.";
         break;
       }
       const duration = calculateInterval(start, end);
       if (duration === null) {
+        setInvalid(startInput, true);
+        setInvalid(endInput, true);
         error = "Vérifiez le format des horaires saisis.";
         break;
       }
       if (duration === 0) {
+        setInvalid(startInput, true);
+        setInvalid(endInput, true);
         error = "L'heure de début et l'heure de fin doivent être différentes.";
         break;
       }
       gross += duration;
     }
 
-    const pauseValue = document.querySelector<HTMLInputElement>("#daily-break")?.value ?? "00:00";
+    const pauseValue = pauseInput?.value ?? "00:00";
     const pause = parseTime(pauseValue) ?? 0;
-    if (!error && pause > gross) error = "La pause ne peut pas dépasser le temps saisi.";
+    if (!error && pause > gross) {
+      setInvalid(pauseInput, true);
+      error = "La pause ne peut pas dépasser le temps saisi.";
+    }
     const total = error ? 0 : Math.max(0, gross - pause);
 
     setText("#daily-total", minutesToHHMM(total));
@@ -205,6 +227,7 @@ import DecimalConverter from "./DecimalConverter.astro";
       const enabled = row.querySelector<HTMLInputElement>("[type='checkbox']");
       const timeInputs = Array.from(row.querySelectorAll<HTMLInputElement>("input[type='time']"));
       timeInputs.forEach((input) => { input.disabled = !(enabled?.checked); });
+      timeInputs.forEach((input) => setInvalid(input, false));
       const output = row.querySelector<HTMLOutputElement>("[data-day-total]");
       if (!enabled?.checked) {
         if (output) output.textContent = "0 h 00";
@@ -216,8 +239,11 @@ import DecimalConverter from "./DecimalConverter.astro";
       const pause = parseTime(pauseInput) ?? 0;
       let total = 0;
       if (duration === null || duration === 0) {
+        setInvalid(timeInputs[0], true);
+        setInvalid(timeInputs[1], true);
         firstError ||= `Vérifiez les horaires du ${row.dataset.weekDay}.`;
       } else if (pause > duration) {
+        setInvalid(timeInputs[2], true);
         firstError ||= `La pause du ${row.dataset.weekDay} dépasse la durée travaillée.`;
       } else {
         total = duration - pause;
@@ -231,10 +257,14 @@ import DecimalConverter from "./DecimalConverter.astro";
   }
 
   function updateSubtraction() {
-    const first = document.querySelector<HTMLInputElement>("#duration-one")?.value ?? "";
-    const second = document.querySelector<HTMLInputElement>("#duration-two")?.value ?? "";
+    const firstInput = document.querySelector<HTMLInputElement>("#duration-one");
+    const secondInput = document.querySelector<HTMLInputElement>("#duration-two");
+    const first = firstInput?.value ?? "";
+    const second = secondInput?.value ?? "";
     const firstMinutes = parseDuration(first);
     const secondMinutes = parseDuration(second);
+    setInvalid(firstInput, firstMinutes === null);
+    setInvalid(secondInput, secondMinutes === null);
     const error = firstMinutes === null || secondMinutes === null
       ? "Utilisez le format 17:45 ou 36h15."
       : "";
@@ -243,16 +273,26 @@ import DecimalConverter from "./DecimalConverter.astro";
   }
 
   function updateDurationConversion() {
-    const hours = Number(document.querySelector<HTMLInputElement>("#convert-hours")?.value);
-    const minutes = Number(document.querySelector<HTMLInputElement>("#convert-minutes")?.value);
-    const invalid = !Number.isInteger(hours) || hours < 0 || !Number.isInteger(minutes) || minutes < 0 || minutes > 59;
+    const hoursInput = document.querySelector<HTMLInputElement>("#convert-hours");
+    const minutesInput = document.querySelector<HTMLInputElement>("#convert-minutes");
+    const hoursValue = hoursInput?.value ?? "";
+    const minutesValue = minutesInput?.value ?? "";
+    const hours = Number(hoursValue);
+    const minutes = Number(minutesValue);
+    const invalidHours = hoursValue === "" || !Number.isInteger(hours) || hours < 0;
+    const invalidMinutes = minutesValue === "" || !Number.isInteger(minutes) || minutes < 0 || minutes > 59;
+    const invalid = invalidHours || invalidMinutes;
+    setInvalid(hoursInput, invalidHours);
+    setInvalid(minutesInput, invalidMinutes);
     setText("#duration-decimal", invalid ? "0,00 h" : `${formatFrenchDecimal(hours + minutes / 60)} h`);
     setError("#duration-converter-error", invalid ? "Saisissez des heures positives et des minutes entre 0 et 59." : "");
   }
 
   function updateDecimalConversion() {
-    const value = document.querySelector<HTMLInputElement>("#decimal-hours")?.value ?? "";
+    const decimalInput = document.querySelector<HTMLInputElement>("#decimal-hours");
+    const value = decimalInput?.value ?? "";
     const decimal = parseFrenchDecimal(value);
+    setInvalid(decimalInput, decimal === null);
     setText("#decimal-duration", decimal === null ? "0 h 00" : minutesToHHMM(decimalToMinutes(decimal)));
     setError("#decimal-converter-error", decimal === null ? "Saisissez une valeur comme 7,75." : "");
   }
