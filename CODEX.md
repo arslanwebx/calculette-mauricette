@@ -23,7 +23,7 @@ This file is the **master context document** for the entire project.
 Before Codex makes any meaningful change to the website, it must:
 
 1. Read this entire `CODEX.md`.
-2. Read `SEO-PUBLISHING-PLAYBOOK.md` and `ONPAGE-SEO.md` completely before making any change. Together with this file, they are the project's source of truth for publishing, on-page SEO, and bidirectional internal linking.
+2. Read `SEO-PUBLISHING-PLAYBOOK.md` completely before making any change. Together with this file, it is the project's source of truth for publishing, on-page SEO, and bidirectional internal linking.
 3. Inspect the current repository before making assumptions.
 4. Preserve working functionality, URLs, SEO equity, design consistency, and deployment compatibility.
 5. Search the repository before creating any new route, component, calculator, article, or SEO target.
@@ -1971,10 +1971,9 @@ Use:
 ```text
 /CODEX.md
 /SEO-PUBLISHING-PLAYBOOK.md
-/ONPAGE-SEO.md
 ```
 
-These three files are the project's source of truth and must be read completely before making changes.
+These two files are the project's source of truth and must be read completely before making changes.
 
 If the project becomes significantly larger, future optional documentation may include:
 
