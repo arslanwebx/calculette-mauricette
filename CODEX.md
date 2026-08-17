@@ -16,15 +16,16 @@ This file is the strategic and editorial source of truth for the project.
 Before Codex creates, deletes, renames, rewrites, or materially changes any public page, it must:
 
 1. Read this file.
-2. Inspect the existing repository structure.
-3. Search the repository for the target keyword and close variants.
-4. Check whether an existing URL already owns the same search intent.
-5. Preserve the current canonical URL unless there is a strong reason to change it.
-6. Avoid creating a second page for an intent already owned by another page.
-7. Preserve or improve internal links.
-8. Preserve crawlability, accessibility, speed, and mobile usability.
-9. Verify time-sensitive French legal/payroll claims against current primary sources before publishing them.
-10. Prefer improving an existing strong page over creating a near-duplicate article.
+2. Read `ONPAGE-SEO.md` for the mandatory on-page SEO and bidirectional internal-linking workflow.
+3. Inspect the existing repository structure.
+4. Search the repository for the target keyword and close variants.
+5. Check whether an existing URL already owns the same search intent.
+6. Preserve the current canonical URL unless there is a strong reason to change it.
+7. Avoid creating a second page for an intent already owned by another page.
+8. Preserve or improve internal links.
+9. Preserve crawlability, accessibility, speed, and mobile usability.
+10. Verify time-sensitive French legal/payroll claims against current primary sources before publishing them.
+11. Prefer improving an existing strong page over creating a near-duplicate article.
 
 **One search intent = one primary canonical URL.**
 
