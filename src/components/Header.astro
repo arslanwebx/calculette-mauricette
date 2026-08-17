@@ -11,7 +11,7 @@ const currentPath = Astro.url.pathname;
 
     <nav class="desktop-nav" aria-label="Navigation principale">
       <a href="/#calculatrice" aria-current={currentPath === "/" ? "page" : undefined}>Calculatrice</a>
-      <a href="/#fonctionnement">Comment ça marche</a>
+      <a href="/calcul-heures-travail/" aria-current={currentPath === "/calcul-heures-travail/" ? "page" : undefined}>Calculateurs</a>
       <a href="/a-propos/" aria-current={currentPath === "/a-propos/" ? "page" : undefined}>À propos</a>
       <a class="header-contact" href="/contact/" aria-current={currentPath === "/contact/" ? "page" : undefined}>Contact</a>
     </nav>
@@ -20,7 +20,7 @@ const currentPath = Astro.url.pathname;
       <summary>Menu</summary>
       <nav aria-label="Navigation mobile">
         <a href="/#calculatrice" aria-current={currentPath === "/" ? "page" : undefined}>Calculatrice</a>
-        <a href="/#fonctionnement">Comment ça marche</a>
+        <a href="/calcul-heures-travail/" aria-current={currentPath === "/calcul-heures-travail/" ? "page" : undefined}>Calculateurs</a>
         <a href="/a-propos/" aria-current={currentPath === "/a-propos/" ? "page" : undefined}>À propos</a>
         <a class="mobile-contact-link" href="/contact/" aria-current={currentPath === "/contact/" ? "page" : undefined}>Contact</a>
       </nav>
