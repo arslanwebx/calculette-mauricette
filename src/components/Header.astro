@@ -11,7 +11,12 @@ const currentPath = Astro.url.pathname;
 
     <nav class="desktop-nav" aria-label="Navigation principale">
       <a href="/#calculatrice" aria-current={currentPath === "/" ? "page" : undefined}>Calculatrice</a>
-      <a href="/calcul-heures-travail/" aria-current={currentPath === "/calcul-heures-travail/" ? "page" : undefined}>Calculateurs</a>
+      <details class="desktop-calculator-menu">
+        <summary>Calculateurs</summary>
+        <div class="desktop-calculator-menu__panel">
+          <a href="/calcul-heures-travail/" aria-current={currentPath === "/calcul-heures-travail/" ? "page" : undefined}>Calcul heures de travail</a>
+        </div>
+      </details>
       <a href="/a-propos/" aria-current={currentPath === "/a-propos/" ? "page" : undefined}>À propos</a>
       <a class="header-contact" href="/contact/" aria-current={currentPath === "/contact/" ? "page" : undefined}>Contact</a>
     </nav>
@@ -20,7 +25,10 @@ const currentPath = Astro.url.pathname;
       <summary>Menu</summary>
       <nav aria-label="Navigation mobile">
         <a href="/#calculatrice" aria-current={currentPath === "/" ? "page" : undefined}>Calculatrice</a>
-        <a href="/calcul-heures-travail/" aria-current={currentPath === "/calcul-heures-travail/" ? "page" : undefined}>Calculateurs</a>
+        <details class="mobile-calculator-menu">
+          <summary>Calculateurs</summary>
+          <a href="/calcul-heures-travail/" aria-current={currentPath === "/calcul-heures-travail/" ? "page" : undefined}>Calcul heures de travail</a>
+        </details>
         <a href="/a-propos/" aria-current={currentPath === "/a-propos/" ? "page" : undefined}>À propos</a>
         <a class="mobile-contact-link" href="/contact/" aria-current={currentPath === "/contact/" ? "page" : undefined}>Contact</a>
       </nav>
@@ -38,6 +46,14 @@ const currentPath = Astro.url.pathname;
       if (event.key !== "Escape" || !menu.open) return;
       menu.removeAttribute("open");
       summary?.focus();
+    });
+  });
+
+  document.querySelectorAll<HTMLDetailsElement>(".desktop-calculator-menu, .mobile-calculator-menu").forEach((menu) => {
+    menu.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !menu.open) return;
+      menu.removeAttribute("open");
+      menu.querySelector<HTMLElement>("summary")?.focus();
     });
   });
 </script>
