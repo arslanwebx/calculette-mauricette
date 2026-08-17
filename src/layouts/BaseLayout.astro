@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import AnalyticsConsent from "../components/AnalyticsConsent.astro";
 
 interface Props {
   title: string;
@@ -101,5 +102,6 @@ const structuredData = breadcrumbStructuredData
   <body>
     <a class="skip-link" href="#contenu">Aller au contenu</a>
     <slot />
+    <AnalyticsConsent />
   </body>
 </html>

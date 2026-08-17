@@ -1016,6 +1016,51 @@ textarea[aria-invalid="true"] {
   font-weight: 700;
 }
 
+.analytics-consent {
+  position: fixed;
+  z-index: 20;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  display: flex;
+  width: min(100% - 2rem, 720px);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--text) 18%, transparent);
+  padding: 1rem;
+}
+
+.analytics-consent strong {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.analytics-consent p {
+  max-width: 48ch;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.84rem;
+}
+
+.analytics-consent a {
+  display: inline-block;
+  margin-top: 0.35rem;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.analytics-consent__actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.5rem;
+}
+
 .contact-form .button {
   justify-self: start;
 }
@@ -1379,6 +1424,22 @@ th:last-child {
   text-decoration: underline;
 }
 
+.footer-consent-button {
+  border: 0;
+  background: transparent;
+  color: var(--text-soft);
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.footer-consent-button:hover {
+  color: var(--accent);
+}
+
 .footer-meta {
   margin-top: 2rem;
   border-top: 1px solid var(--line);
@@ -1500,6 +1561,19 @@ th:last-child {
     align-items: flex-start;
     flex-wrap: wrap;
     padding: 1rem;
+  }
+
+  .analytics-consent {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .analytics-consent__actions {
+    width: 100%;
+  }
+
+  .analytics-consent__actions .button {
+    flex: 1 1 0;
   }
 
   .calculator-titlebar > div {

@@ -7,7 +7,7 @@ export const siteConfig = {
   name: "Calculette Mauricette",
   url: "https://calculette-mauricette.pro",
   purpose: "Un outil gratuit pour calculer les heures de travail.",
-  legalUpdatedAt: "16 août 2026",
+  legalUpdatedAt: "18 août 2026",
   publisher: {
     name: readPublicValue(import.meta.env.PUBLIC_PUBLISHER_NAME),
     type: readPublicValue(import.meta.env.PUBLIC_PUBLISHER_TYPE),
