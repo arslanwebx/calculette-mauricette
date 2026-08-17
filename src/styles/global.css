@@ -272,6 +272,146 @@ h3 {
   position: relative;
 }
 
+.work-hours-page {
+  padding-top: 1.5rem;
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.work-hours-page__header {
+  max-width: 790px;
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.work-hours-page__header h1 {
+  margin-bottom: 0.65rem;
+}
+
+.work-hours-page__header p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+}
+
+.work-hours-tool {
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.work-hours-tool__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.work-hours-tool__heading h2 {
+  margin-bottom: 0.25rem;
+  font-size: clamp(1.3rem, 3vw, 1.65rem);
+}
+
+.work-hours-tool__heading p,
+.work-hours-tool__privacy {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.work-hours-tool__privacy {
+  max-width: 225px;
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.work-hours-tool__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(270px, 325px);
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.work-hours-labels,
+.work-hours-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 20px minmax(120px, 1fr) 42px;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.work-hours-labels {
+  margin-bottom: 0.4rem;
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.work-hours-row {
+  margin-bottom: 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-soft);
+  padding: 0.6rem;
+}
+
+.work-hours-row label { min-width: 0; }
+.work-hours-row label > span { display: none; }
+.work-hours-arrow { color: var(--text-soft); font-weight: 700; text-align: center; }
+
+.work-hours-break {
+  display: grid;
+  grid-template-columns: 155px minmax(110px, 160px);
+  gap: 0.35rem 0.8rem;
+  align-items: center;
+  margin-top: 1rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+.work-hours-break label { font-size: 0.87rem; font-weight: 700; }
+.work-hours-break p { grid-column: 1 / -1; margin: 0; color: var(--text-soft); font-size: 0.78rem; }
+
+.work-hours-result {
+  align-self: start;
+  border: 1px solid var(--line-strong);
+  border-top: 3px solid var(--accent);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  padding: clamp(1.2rem, 3vw, 1.5rem);
+}
+
+.work-hours-result > p { margin: 0 0 0.15rem; color: var(--text-soft); font-size: 0.84rem; font-weight: 700; }
+.work-hours-result output { display: block; color: var(--accent-hover); font-size: clamp(2.25rem, 5vw, 3rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.045em; font-variant-numeric: tabular-nums; }
+.work-hours-result dl { margin: 1.2rem 0; }
+.work-hours-result dl div { display: flex; justify-content: space-between; gap: 0.7rem; border-top: 1px solid var(--line); padding-top: 0.7rem; color: var(--text-soft); font-size: 0.82rem; }
+.work-hours-result dd { margin: 0; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.work-hours-content {
+  max-width: 790px;
+  border-top: 1px solid var(--line);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.work-hours-content h2 { margin-bottom: 0.8rem; font-size: clamp(1.35rem, 3vw, 1.8rem); }
+.work-hours-content p { max-width: 70ch; }
+.work-hours-content ol { padding-left: 1.25rem; }
+.work-hours-content li { margin-bottom: 0.5rem; }
+
+.work-hours-example { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.work-hours-example div { display: grid; grid-template-columns: 0.8fr 1.4fr 0.6fr; gap: 1rem; padding: 0.85rem 1rem; border-bottom: 1px solid var(--line); }
+.work-hours-example div:last-child { border-bottom: 0; }
+.work-hours-example span { color: var(--text-soft); }
+.work-hours-example b { color: var(--accent-hover); text-align: right; font-variant-numeric: tabular-nums; }
+.work-hours-example__total { background: var(--surface-soft); font-weight: 700; }
+
+.work-hours-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.work-hours-links a { display: grid; gap: 0.25rem; min-height: 112px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 1rem; color: var(--text); text-decoration: none; }
+.work-hours-links a:nth-child(even) { border-right: 0; }
+.work-hours-links a:nth-last-child(-n + 2) { border-bottom: 0; }
+.work-hours-links a:hover { background: var(--accent-soft); }
+.work-hours-links span { color: var(--text-soft); font-size: 0.86rem; }
+
 .calculator-shell {
   overflow: hidden;
   border: 1px solid var(--line-strong);
@@ -1415,6 +1555,7 @@ th:last-child {
 
   .calculator-grid,
   .compact-tool-layout,
+  .work-hours-tool__layout,
   .converter-grid,
   .example-section,
   .decimal-layout,
@@ -1474,6 +1615,16 @@ th:last-child {
 
   .footer-layout nav {
     flex-wrap: wrap;
+  }
+
+  .work-hours-tool__heading {
+    display: block;
+  }
+
+  .work-hours-tool__privacy {
+    max-width: none;
+    margin-top: 0.55rem;
+    text-align: left;
   }
 }
 
@@ -1554,6 +1705,35 @@ th:last-child {
     gap: 0.42rem;
     align-items: end;
   }
+
+  .work-hours-labels { display: none; }
+
+  .work-hours-row {
+    grid-template-columns: minmax(0, 1fr) 12px minmax(0, 1fr) 44px;
+    gap: 0.42rem;
+    align-items: end;
+  }
+
+  .work-hours-row label > span {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--text-soft);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .work-hours-row .icon-button { width: 44px; height: 46px; }
+  .work-hours-break { grid-template-columns: minmax(0, 1fr) 125px; }
+
+  .work-hours-links { grid-template-columns: minmax(0, 1fr); }
+  .work-hours-links a,
+  .work-hours-links a:nth-child(even),
+  .work-hours-links a:nth-last-child(-n + 2) { border-right: 0; border-bottom: 1px solid var(--line); }
+  .work-hours-links a:last-child { border-bottom: 0; }
+
+  .work-hours-example div { grid-template-columns: minmax(0, 1fr) auto; gap: 0.35rem 0.7rem; }
+  .work-hours-example strong { grid-column: 1; }
+  .work-hours-example b { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
 
   .period-row .icon-button {
     width: 44px;
@@ -1647,6 +1827,31 @@ th:last-child {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
   }
+
+  .work-hours-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .work-hours-row .work-hours-arrow { display: none; }
+
+  .work-hours-row .work-hours-remove {
+    grid-column: 1 / -1;
+    width: auto;
+    height: 42px;
+    justify-self: end;
+    padding-inline: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .work-hours-row .work-hours-remove::after {
+    content: "Supprimer";
+    margin-left: 0.35rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+
+  .work-hours-break { grid-template-columns: minmax(0, 1fr); }
 
   .period-row .time-arrow {
     display: none;

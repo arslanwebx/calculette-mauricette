@@ -1,0 +1,161 @@
+<section class="work-hours-tool" aria-labelledby="work-hours-tool-title">
+  <div class="work-hours-tool__heading">
+    <div>
+      <h2 id="work-hours-tool-title">Calculez vos heures travaillées</h2>
+      <p>Ajoutez une ou plusieurs plages. Une fin antérieure au début est calculée comme un passage après minuit.</p>
+    </div>
+    <p class="work-hours-tool__privacy">Calcul local : vos horaires ne quittent pas votre navigateur.</p>
+  </div>
+
+  <div class="work-hours-tool__layout">
+    <form id="work-hours-form" class="work-hours-form" novalidate>
+      <div class="work-hours-labels" aria-hidden="true"><span>Début</span><span>Fin</span><span></span></div>
+      <div class="work-hours-periods" id="work-hours-periods">
+        <div class="work-hours-row" data-work-hours-row>
+          <label><span>Début</span><input type="time" name="work-start" value="08:30" required aria-label="Début de la période 1" aria-describedby="work-hours-error" /></label>
+          <span class="work-hours-arrow" aria-hidden="true">→</span>
+          <label><span>Fin</span><input type="time" name="work-end" value="17:30" required aria-label="Fin de la période 1" aria-describedby="work-hours-error" /></label>
+          <button class="icon-button work-hours-remove" type="button" aria-label="Supprimer la période 1" disabled><span aria-hidden="true">×</span></button>
+        </div>
+      </div>
+      <button class="text-button" id="work-hours-add" type="button"><span aria-hidden="true">+</span> Ajouter une plage horaire</button>
+
+      <div class="work-hours-break">
+        <label for="work-hours-break">Pause à déduire</label>
+        <input id="work-hours-break" type="time" value="01:00" aria-describedby="work-hours-break-help work-hours-error" />
+        <p id="work-hours-break-help">Laissez 00:00 si votre pause est déjà séparée en plusieurs plages.</p>
+      </div>
+      <p class="form-error" id="work-hours-error" role="alert" hidden></p>
+    </form>
+
+    <aside class="work-hours-result" aria-label="Résultat du calcul des heures de travail">
+      <p>Temps travaillé</p>
+      <output id="work-hours-total" aria-live="polite">8 h 00</output>
+      <dl>
+        <div><dt>Heures décimales</dt><dd id="work-hours-decimal">8,00 h</dd></div>
+        <div><dt>Durée en minutes</dt><dd id="work-hours-minutes">480 min</dd></div>
+      </dl>
+      <div class="result-actions">
+        <button class="button button--small" id="work-hours-copy" type="button">Copier le total</button>
+        <button class="button button--small button--quiet" type="reset" form="work-hours-form">Réinitialiser</button>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+  import { calculateInterval, formatFrenchDecimal, minutesToDecimal, minutesToHHMM, parseTime } from "../lib/time";
+
+  const form = document.querySelector<HTMLFormElement>("#work-hours-form");
+  const periods = document.querySelector<HTMLElement>("#work-hours-periods");
+  const breakInput = document.querySelector<HTMLInputElement>("#work-hours-break");
+  const error = document.querySelector<HTMLElement>("#work-hours-error");
+
+  function updateText(selector: string, value: string) {
+    const element = document.querySelector<HTMLElement>(selector);
+    if (element) element.textContent = value;
+  }
+
+  function createRow(startValue = "", endValue = "") {
+    const row = document.createElement("div");
+    row.className = "work-hours-row";
+    row.dataset.workHoursRow = "";
+    row.innerHTML = `
+      <label><span>Début</span><input type="time" name="work-start" value="${startValue}" required aria-describedby="work-hours-error" /></label>
+      <span class="work-hours-arrow" aria-hidden="true">→</span>
+      <label><span>Fin</span><input type="time" name="work-end" value="${endValue}" required aria-describedby="work-hours-error" /></label>
+      <button class="icon-button work-hours-remove" type="button"><span aria-hidden="true">×</span></button>`;
+    return row;
+  }
+
+  function syncRows() {
+    const rows = Array.from(periods?.querySelectorAll<HTMLElement>("[data-work-hours-row]") ?? []);
+    rows.forEach((row, index) => {
+      const number = index + 1;
+      const start = row.querySelector<HTMLInputElement>("[name='work-start']");
+      const end = row.querySelector<HTMLInputElement>("[name='work-end']");
+      const remove = row.querySelector<HTMLButtonElement>(".work-hours-remove");
+      start?.setAttribute("aria-label", `Début de la période ${number}`);
+      end?.setAttribute("aria-label", `Fin de la période ${number}`);
+      if (remove) {
+        remove.disabled = rows.length === 1;
+        remove.setAttribute("aria-label", `Supprimer la période ${number}`);
+      }
+    });
+  }
+
+  function calculate() {
+    const rows = Array.from(periods?.querySelectorAll<HTMLElement>("[data-work-hours-row]") ?? []);
+    let gross = 0;
+    let message = "";
+    rows.forEach((row) => row.querySelectorAll<HTMLInputElement>("input").forEach((input) => input.setAttribute("aria-invalid", "false")));
+    breakInput?.setAttribute("aria-invalid", "false");
+
+    for (const row of rows) {
+      const start = row.querySelector<HTMLInputElement>("[name='work-start']");
+      const end = row.querySelector<HTMLInputElement>("[name='work-end']");
+      const duration = calculateInterval(start?.value ?? "", end?.value ?? "");
+      if (duration === null || duration === 0) {
+        start?.setAttribute("aria-invalid", "true");
+        end?.setAttribute("aria-invalid", "true");
+        message = "Saisissez une heure de début et une heure de fin différentes pour chaque plage.";
+        break;
+      }
+      gross += duration;
+    }
+
+    const pause = parseTime(breakInput?.value ?? "00:00") ?? 0;
+    if (!message && pause > gross) {
+      breakInput?.setAttribute("aria-invalid", "true");
+      message = "La pause ne peut pas dépasser le temps travaillé.";
+    }
+
+    const total = message ? 0 : gross - pause;
+    updateText("#work-hours-total", minutesToHHMM(total));
+    updateText("#work-hours-decimal", `${formatFrenchDecimal(minutesToDecimal(total))} h`);
+    updateText("#work-hours-minutes", `${total} min`);
+    if (error) {
+      error.textContent = message;
+      error.hidden = !message;
+    }
+  }
+
+  document.querySelector("#work-hours-add")?.addEventListener("click", () => {
+    periods?.append(createRow());
+    syncRows();
+    calculate();
+    periods?.querySelector<HTMLInputElement>("[data-work-hours-row]:last-child input")?.focus();
+  });
+
+  periods?.addEventListener("click", (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>(".work-hours-remove");
+    if (!button || button.disabled) return;
+    button.closest("[data-work-hours-row]")?.remove();
+    syncRows();
+    calculate();
+  });
+
+  form?.addEventListener("input", calculate);
+  form?.addEventListener("change", calculate);
+  form?.addEventListener("reset", () => window.setTimeout(() => {
+    periods?.replaceChildren(createRow("08:30", "17:30"));
+    if (breakInput) breakInput.value = "01:00";
+    syncRows();
+    calculate();
+  }));
+  document.querySelector("#work-hours-copy")?.addEventListener("click", async () => {
+    const button = document.querySelector<HTMLButtonElement>("#work-hours-copy");
+    const total = document.querySelector("#work-hours-total")?.textContent ?? "";
+    const original = button?.textContent ?? "Copier le total";
+    try {
+      await navigator.clipboard.writeText(total);
+      if (button) button.textContent = "Copié";
+    } catch {
+      if (button) button.textContent = "Copie indisponible";
+    }
+    window.setTimeout(() => { if (button) button.textContent = original; }, 1400);
+  });
+
+  syncRows();
+  calculate();
+</script>

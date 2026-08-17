@@ -1,0 +1,87 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import WorkHoursCalculator from "../components/WorkHoursCalculator.astro";
+
+const title = "Calcul heures de travail : outil gratuit en ligne";
+const description = "Calculez vos heures de travail : horaires, pauses, plusieurs plages et travail de nuit. Résultat immédiat en heures, minutes et format décimal.";
+---
+
+<BaseLayout
+  {title}
+  {description}
+  breadcrumbs={[
+    { name: "Accueil", url: "/" },
+    { name: "Calcul heures de travail", url: "/calcul-heures-travail/" },
+  ]}
+>
+  <div id="top"></div>
+  <Header />
+  <main id="contenu" class="work-hours-page page-shell">
+    <nav class="breadcrumbs" aria-label="Fil d’Ariane">
+      <a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">Calcul heures de travail</span>
+    </nav>
+
+    <article>
+      <header class="work-hours-page__header">
+        <h1>Calcul heures de travail</h1>
+        <p>Calculez simplement votre temps de travail avec vos heures de début, de fin et vos pauses. L’outil additionne les plages d’une journée et affiche un total immédiatement vérifiable.</p>
+      </header>
+
+      <WorkHoursCalculator />
+
+      <section class="work-hours-content" aria-labelledby="how-work-hours-title">
+        <h2 id="how-work-hours-title">Comment calculer vos heures de travail ?</h2>
+        <ol>
+          <li>Indiquez l’heure de début et l’heure de fin de votre première plage.</li>
+          <li>Ajoutez une nouvelle plage si votre journée est coupée, par exemple entre le matin et l’après-midi.</li>
+          <li>Déduisez une pause uniquement si elle n’est pas déjà séparée entre deux plages.</li>
+          <li>Consultez le total en heures et minutes, puis en heures décimales si ce format vous est demandé.</li>
+        </ol>
+        <p>Une heure de fin située avant l’heure de début est considérée comme un horaire qui passe après minuit. Ainsi, 21:00 à 06:00 correspond à 9 h 00.</p>
+      </section>
+
+      <section class="work-hours-content" aria-labelledby="example-work-hours-title">
+        <h2 id="example-work-hours-title">Exemple de calcul d’une journée</h2>
+        <div class="work-hours-example">
+          <div><span>Matin</span><strong>08:30 → 12:00</strong><b>3 h 30</b></div>
+          <div><span>Après-midi</span><strong>13:00 → 17:30</strong><b>4 h 30</b></div>
+          <div class="work-hours-example__total"><span>Total</span><strong>Deux plages, sans pause supplémentaire</strong><b>8 h 00</b></div>
+        </div>
+        <p>Dans cet exemple, la coupure entre 12:00 et 13:00 est déjà exclue parce que les horaires sont saisis sur deux lignes. Il ne faut donc pas ajouter une heure de pause dans le champ de déduction.</p>
+      </section>
+
+      <section class="work-hours-content" aria-labelledby="decimal-work-hours-title">
+        <h2 id="decimal-work-hours-title">Heures, minutes et format décimal</h2>
+        <p>Le résultat principal est affiché au format habituel : 7 h 30. Certains logiciels ou feuilles de temps demandent toutefois un format décimal. Dans ce cas, 30 minutes correspondent à 0,50 heure : 7 h 30 devient donc 7,50 h, et non 7,30 h.</p>
+        <p>Utilisez le <a href="/#conversion">convertisseur d’heures en décimal</a> de la Calculette Mauricette pour vérifier une conversion précise.</p>
+      </section>
+
+      <section class="work-hours-content" aria-labelledby="limits-work-hours-title">
+        <h2 id="limits-work-hours-title">Ce que calcule cet outil</h2>
+        <p>Cette calculatrice mesure des durées à partir des horaires que vous renseignez. Elle est utile pour contrôler une journée, préparer une feuille d’heures ou comparer un total avec vos propres relevés. Elle ne détermine pas à elle seule les règles de paie, les majorations ou les particularités prévues par un contrat ou une convention collective.</p>
+      </section>
+
+      <section class="work-hours-content" aria-labelledby="related-work-hours-title">
+        <h2 id="related-work-hours-title">Continuer votre calcul</h2>
+        <div class="work-hours-links">
+          <a href="/#semaine"><strong>Calculer une semaine</strong><span>Regroupez les horaires du lundi au dimanche.</span></a>
+          <a href="/#soustraction"><strong>Soustraire deux durées</strong><span>Comparez deux totaux, même au-delà de 24 heures.</span></a>
+          <a href="/#conversion"><strong>Convertir en heures décimales</strong><span>Transformez un total heures/minutes en valeur décimale.</span></a>
+          <a href="/contact/"><strong>Signaler un problème</strong><span>Contactez-nous si un calcul semble incorrect.</span></a>
+        </div>
+      </section>
+
+      <section class="work-hours-content" aria-labelledby="faq-work-hours-title">
+        <h2 id="faq-work-hours-title">Questions fréquentes</h2>
+        <div class="faq-list">
+          <details><summary>Comment calculer mes heures avec une pause déjeuner ?</summary><p>Vous pouvez saisir une seule plage puis déduire la pause, ou saisir deux plages distinctes avant et après le déjeuner. N’utilisez pas les deux méthodes pour la même pause.</p></details>
+          <details><summary>Comment calculer des heures de nuit ?</summary><p>Entrez l’horaire de début puis l’horaire de fin, même si la fin est le lendemain. Par exemple, 22:00 à 05:00 donne 7 h 00.</p></details>
+          <details><summary>Pourquoi le résultat en décimal est-il différent ?</summary><p>Le format décimal convertit les minutes en fraction d’heure. Par exemple, 15 minutes valent 0,25 h et 45 minutes valent 0,75 h.</p></details>
+        </div>
+      </section>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
